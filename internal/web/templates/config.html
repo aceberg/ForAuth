@@ -1,107 +1,109 @@
 {{ define "config.html" }}
 
 <body>
-    <div class="container-lg mt-4">
+  <div class="container-lg mt-4">
     <div class="row">
-        <div class="col-md mb-4">
+      <div class="col-md mb-4">
         <div class="card border-primary">
-            <div class="card-header">Config</div>
-        <div class="card-body table-responsive">
-        <table class="table table-borderless">
+          <div class="card-header">Config</div>
+          <div class="card-body table-responsive">
+            <table class="table table-borderless">
             <form action="/config/" method="post">
-                <tr>
-                    <td>Host<button type="button" class="btn tip-button" mytitle="Restart the app if changed">
-                        <i class="bi bi-question-circle"></i>
-                    </button></td>
-                    <td><input name="host" type="text" class="form-control" value="{{ .Config.Host }}"></td>
-                </tr>
-                <tr>
-                    <td>Port<button type="button" class="btn tip-button" mytitle="Restart the app if changed">
-                        <i class="bi bi-question-circle"></i>
-                    </button></td>
-                    <td><input name="port" type="text" class="form-control" value="{{ .Config.Port }}"></td>
-                </tr>
-                <tr>
-                    <td>Theme</td>
-                    <td><select name="theme" class="form-select">
-                        <option selected>{{ .Config.Theme }}</option>
-                        {{ range .Themes }}
-                            <option value="{{ . }}">{{ . }}</option>
-                        {{ end }}
-                    </select></td>
-                </tr>
-                <tr>
-                    <td>Color mode</td>
-                    <td><select name="color" class="form-select">
-                        <option selected>{{ .Config.Color }}</option>
-                        <option value="light">light</option>
-                        <option value="dark">dark</option>
-                    </select></td>
-                </tr>
-                <tr>
-                    <td><button type="submit" class="btn btn-primary">Save</button></td>
-                    <td></td>
-                </tr>
+              <tr>
+                <td>Proxy Host</td>
+                <td><input name="host" type="text" class="form-control" value="{{ .Config.Host }}"></td>
+              </tr>
+              <tr>
+                <td>Proxy Port</td>
+                <td><input name="port" type="text" class="form-control" value="{{ .Config.Port }}"></td>
+              </tr>
+              <tr>
+                <td>Config Port</td>
+                <td><input name="portconf" type="text" class="form-control" value="{{ .Config.PortConf }}"></td>
+              </tr>
+              <tr>
+                <td>Target (host:port)</td>
+                <td><input name="target" type="text" class="form-control" value="{{ .Config.Target }}"></td>
+              </tr>
+              <tr>
+                <td>Theme</td>
+                <td><select name="theme" class="form-select">
+                    <option selected>{{ .Config.Theme }}</option>
+                    {{ range .Themes }}
+                        <option value="{{ . }}">{{ . }}</option>
+                    {{ end }}
+                </select></td>
+              </tr>
+              <tr>
+                <td>Color mode</td>
+                <td><select name="color" class="form-select">
+                  <option selected>{{ .Config.Color }}</option>
+                  <option value="light">light</option>
+                  <option value="dark">dark</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td>Node path</td>
+                <td><input name="nodepath" type="text" class="form-control" value="{{ .Config.NodePath }}"></td>
+              </tr>
+              <tr>
+                <td><button type="submit" class="btn btn-primary">Save</button></td>
+                <td></td>
+              </tr>
             </form>
-        </table>
-        </div>
-        </div>
-        </div>
-        <div class="col-md">
-            <div class="card border-primary mb-4">
-                <div class="card-header">Auth</div>
-                <div class="card-body table-responsive">
-                    <table class="table table-borderless">
-                        <form action="/config/auth" method="post">
-                            <tr>
-                                <td>Enable<button type="button" class="btn tip-button" mytitle="Authentication is only safe when used over HTTPS and with a strong password">
-                                    <i class="bi bi-question-circle"></i>
-                                </button></td>
-                                <td>
-                                    <div class="form-check form-switch">
-                                        {{ if .Auth.Auth }}
-                                        <input class="form-check-input" type="checkbox" name="auth" checked>
-                                        {{ else }}
-                                        <input class="form-check-input" type="checkbox" name="auth">
-                                        {{ end }}
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Expire after<button type="button" class="btn tip-button" mytitle="When user session expires. Can be set with suffixes m(minute), h(hour), d(day) or M(month). Default: 7d">
-                                    <i class="bi bi-question-circle"></i>
-                                </button></td>
-                                <td><input name="expire" type="text" class="form-control" value="{{ .Auth.ExpStr }}"></td>
-                            </tr>
-                            <tr>
-                                <td>Login<button type="button" class="btn tip-button" mytitle="Must not be empty">
-                                    <i class="bi bi-question-circle"></i>
-                                </button></td>
-                                <td><input name="user" type="text" class="form-control" value="{{ .Auth.User }}"></td>
-                            </tr>
-                            <tr>
-                                <td>New password<button type="button" class="btn tip-button" mytitle="Stored encrypted in config file">
-                                    <i class="bi bi-question-circle"></i>
-                                </button></td>
-                                <td><input name="password" type="password" class="form-control"></td>
-                            </tr>
-                            <tr>
-                                <td><button type="submit" class="btn btn-primary">Save</button></td>
-                                <td></td>
-                            </tr>
-                        </form>
-                    </table>
+            </table>
+          </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card border-primary mb-4">
+        <div class="card-header">Auth</div>
+        <div class="card-body table-responsive">
+          <table class="table table-borderless">
+          <form action="/config/auth" method="post">
+            <tr>
+              <td>Enable</td>
+              <td>
+                <div class="form-check form-switch">
+                  {{ if .Auth.Auth }}
+                  <input class="form-check-input" type="checkbox" name="auth" checked>
+                  {{ else }}
+                  <input class="form-check-input" type="checkbox" name="auth">
+                  {{ end }}
                 </div>
-            </div>
-            <div class="card border-primary mb-4">
-                <div class="card-header">About (<a href="https://github.com/aceberg/ForAuth/releases/tag/{{ .Version }}" target="_blank">{{ .Version }}</a>)</div>
-            <div class="card-body">
-                <p>If you find this app useful, please, <a href="https://github.com/aceberg#donate" target="_blank">donate</a></p>
-                <p>Commission you own app (Golang, HTML/JS). Contact and prices <a href="https://github.com/aceberg" target="_blank">here</a></p>
-            </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Expire after</td>
+              <td><input name="expire" type="text" class="form-control" value="{{ .Auth.ExpStr }}"></td>
+            </tr>
+            <tr>
+              <td>Login</td>
+              <td><input name="user" type="text" class="form-control" value="{{ .Auth.User }}"></td>
+            </tr>
+            <tr>
+              <td>New password</td>
+              <td><input name="password" type="password" class="form-control"></td>
+            </tr>
+            <tr>
+              <td><button type="submit" class="btn btn-primary">Save</button></td>
+              <td>
+                <a href="http://{{ .Config.Host }}:{{ .Config.PortConf }}/logout"><button type="button" class="btn btn-success">LogOut</button></a>
+              </td>
+            </tr>
+          </form>
+          </table>
         </div>
+      </div>
+      <div class="card border-primary mb-4">
+        <div class="card-header">About (<a href="https://github.com/aceberg/ForAuth/releases/tag/{{ .Version }}" target="_blank">{{ .Version }}</a>)</div>
+        <div class="card-body">
+          <p>If you find this app useful, please, <a href="https://github.com/aceberg#donate" target="_blank">donate</a></p>
+          <p>Commission you own app (Golang, HTML/JS). Contact and prices <a href="https://github.com/aceberg" target="_blank">here</a></p>
+        </div>
+      </div>
     </div>
-    </div>
+  </div>
         
 
 {{ template "footer.html" }}

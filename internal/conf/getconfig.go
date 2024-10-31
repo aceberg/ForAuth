@@ -15,8 +15,9 @@ func Get(path string) (config models.Conf, authConf auth.Conf) {
 	viper.SetDefault("FA_PORT", "8800")
 	viper.SetDefault("FA_PORTCONF", "8801")
 	viper.SetDefault("FA_TARGET", "")
-	viper.SetDefault("FA_THEME", "grass")
-	viper.SetDefault("FA_COLOR", "light")
+	viper.SetDefault("FA_THEME", "united")
+	viper.SetDefault("FA_COLOR", "dark")
+	viper.SetDefault("FA_NODEPATH", "")
 
 	viper.SetDefault("FA_AUTH_USER", "")
 	viper.SetDefault("FA_AUTH_PASSWORD", "")
@@ -35,6 +36,7 @@ func Get(path string) (config models.Conf, authConf auth.Conf) {
 	config.Target, _ = viper.Get("FA_TARGET").(string)
 	config.Theme, _ = viper.Get("FA_THEME").(string)
 	config.Color, _ = viper.Get("FA_COLOR").(string)
+	config.NodePath, _ = viper.Get("FA_NODEPATH").(string)
 
 	authConf.Auth = viper.GetBool("FA_AUTH")
 	authConf.User, _ = viper.Get("FA_AUTH_USER").(string)
@@ -42,7 +44,6 @@ func Get(path string) (config models.Conf, authConf auth.Conf) {
 	authConf.ExpStr, _ = viper.Get("FA_AUTH_EXPIRE").(string)
 
 	authConf.Expire = auth.ToTime(authConf.ExpStr)
-	config.Auth = authConf.Auth
 
 	return config, authConf
 }
@@ -59,6 +60,7 @@ func Write(config models.Conf, authConf auth.Conf) {
 	viper.Set("fa_target", config.Target)
 	viper.Set("fa_theme", config.Theme)
 	viper.Set("fa_color", config.Color)
+	viper.Set("fa_nodepath", config.NodePath)
 
 	viper.Set("fa_auth", authConf.Auth)
 	viper.Set("fa_auth_user", authConf.User)

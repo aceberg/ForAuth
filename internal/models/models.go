@@ -15,7 +15,7 @@ type Conf struct {
 	ConfPath string
 	NodePath string
 	Target   string
-	Auth     bool
+	Icon     string
 }
 
 // GuiData - web gui data

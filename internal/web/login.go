@@ -12,31 +12,12 @@ import (
 )
 
 func loginHandler(c *gin.Context) {
-	var guiData models.GuiData
 
-	appConfig.Auth = auth.Auth(c, &authConf)
-
-	if appConfig.Auth {
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
 		reverseProxy(c)
-
 	} else {
-
-		username := c.PostForm("username")
-		password := c.PostForm("password")
-
-		if username == authConf.User && auth.MatchPasswords(authConf.Password, password) {
-
-			log.Println("INFO: user '"+username+"' logged in. Session expire time", authConf.Expire)
-
-			auth.StartSession(c)
-
-			c.Redirect(http.StatusFound, "/")
-		} else {
-			guiData.Config = appConfig
-
-			c.HTML(http.StatusOK, "header.html", guiData)
-			c.HTML(http.StatusOK, "login.html", guiData)
-		}
+		loginScreen(c)
 	}
 }
 
@@ -49,4 +30,25 @@ func reverseProxy(c *gin.Context) {
 
 	proxy := &httputil.ReverseProxy{Director: director}
 	proxy.ServeHTTP(c.Writer, c.Request)
+}
+
+func loginScreen(c *gin.Context) {
+	var guiData models.GuiData
+
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+
+	if username == authConf.User && auth.MatchPasswords(authConf.Password, password) {
+
+		log.Println("INFO: user '"+username+"' logged in. Session expire time", authConf.Expire)
+
+		auth.StartSession(c)
+
+		c.Redirect(http.StatusFound, "/")
+	} else {
+		guiData.Config = appConfig
+
+		c.HTML(http.StatusOK, "header.html", guiData)
+		c.HTML(http.StatusOK, "login.html", guiData)
+	}
 }

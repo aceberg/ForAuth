@@ -19,7 +19,10 @@ func Gui(dirPath, nodePath string) {
 	appConfig, authConf = conf.Get(confPath)
 	appConfig.DirPath = dirPath
 	appConfig.ConfPath = confPath
-	appConfig.NodePath = nodePath
+	if nodePath != "" {
+		appConfig.NodePath = nodePath
+	}
+	appConfig.Icon = icon
 
 	log.Println("INFO: starting web gui with config", appConfig.ConfPath)
 
@@ -28,8 +31,6 @@ func Gui(dirPath, nodePath string) {
 
 	log.Println("=================================== ")
 	log.Printf("Config at http://%s", addressConf)
-	log.Println("=================================== ")
-
 	log.Println("=================================== ")
 	log.Printf("Proxy at http://%s", addressProxy)
 	log.Println("=================================== ")
@@ -46,6 +47,8 @@ func Gui(dirPath, nodePath string) {
 	routerProxy.POST("/*any", loginHandler) // login.go
 
 	routerConf.GET("/", configHandler)              // config.go
+	routerConf.GET("/logout", logoutHandler)        // config.go
+	routerConf.POST("/", configHandler)             // config.go
 	routerConf.POST("/config/", saveConfigHandler)  // config.go
 	routerConf.POST("/config/auth", saveConfigAuth) // config.go
 

@@ -11,58 +11,79 @@ import (
 	"github.com/aceberg/ForAuth/internal/models"
 )
 
+func logoutHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		auth.LogOut(c)
+		c.Redirect(http.StatusFound, "/")
+	}
+}
+
 func configHandler(c *gin.Context) {
 	var guiData models.GuiData
 
-	guiData.Config = appConfig
-	guiData.Auth = authConf
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		guiData.Config = appConfig
+		guiData.Auth = authConf
 
-	guiData.Themes = []string{"cerulean", "cosmo", "cyborg", "darkly", "emerald", "flatly", "grass", "grayscale", "journal", "litera", "lumen", "lux", "materia", "minty", "morph", "ocean", "pulse", "quartz", "sand", "sandstone", "simplex", "sketchy", "slate", "solar", "spacelab", "superhero", "united", "vapor", "wood", "yeti", "zephyr"}
+		guiData.Themes = []string{"cerulean", "cosmo", "cyborg", "darkly", "emerald", "flatly", "grass", "grayscale", "journal", "litera", "lumen", "lux", "materia", "minty", "morph", "ocean", "pulse", "quartz", "sand", "sandstone", "simplex", "sketchy", "slate", "solar", "spacelab", "superhero", "united", "vapor", "wood", "yeti", "zephyr"}
 
-	c.HTML(http.StatusOK, "header.html", guiData)
-	c.HTML(http.StatusOK, "config.html", guiData)
+		c.HTML(http.StatusOK, "header.html", guiData)
+		c.HTML(http.StatusOK, "config.html", guiData)
+	} else {
+		loginScreen(c) // login.go
+	}
 }
 
 func saveConfigHandler(c *gin.Context) {
 
-	appConfig.Host = c.PostForm("host")
-	appConfig.Port = c.PostForm("port")
-	appConfig.Theme = c.PostForm("theme")
-	appConfig.Color = c.PostForm("color")
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		appConfig.Host = c.PostForm("host")
+		appConfig.Port = c.PostForm("port")
+		appConfig.PortConf = c.PostForm("portconf")
+		appConfig.Target = c.PostForm("target")
+		appConfig.Theme = c.PostForm("theme")
+		appConfig.Color = c.PostForm("color")
+		appConfig.NodePath = c.PostForm("nodepath")
 
-	conf.Write(appConfig, authConf)
+		conf.Write(appConfig, authConf)
 
-	log.Println("INFO: writing new config to", appConfig.ConfPath)
-
+		log.Println("INFO: writing new config to", appConfig.ConfPath)
+	}
 	c.Redirect(http.StatusFound, "/")
 }
 
 func saveConfigAuth(c *gin.Context) {
 
-	authConf.User = c.PostForm("user")
-	authConf.ExpStr = c.PostForm("expire")
-	authStr := c.PostForm("auth")
-	pw := c.PostForm("password")
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		authConf.User = c.PostForm("user")
+		authConf.ExpStr = c.PostForm("expire")
+		authStr := c.PostForm("auth")
+		pw := c.PostForm("password")
 
-	if authStr == "on" {
-		authConf.Auth = true
-	} else {
-		authConf.Auth = false
+		if authStr == "on" {
+			authConf.Auth = true
+		} else {
+			authConf.Auth = false
+		}
+
+		if pw != "" {
+			authConf.Password = auth.HashPassword(pw)
+		}
+
+		authConf.Expire = auth.ToTime(authConf.ExpStr)
+
+		if authConf.Auth && (authConf.User == "" || authConf.Password == "") {
+			log.Println("WARNING: Auth won't work with empty login or password.")
+			authConf.Auth = false
+		}
+
+		conf.Write(appConfig, authConf)
 	}
-	appConfig.Auth = authConf.Auth
-
-	if pw != "" {
-		authConf.Password = auth.HashPassword(pw)
-	}
-
-	authConf.Expire = auth.ToTime(authConf.ExpStr)
-
-	if authConf.Auth && (authConf.User == "" || authConf.Password == "") {
-		log.Println("WARNING: Auth won't work with empty login or password.")
-		authConf.Auth = false
-	}
-
-	conf.Write(appConfig, authConf)
 
 	c.Redirect(http.StatusFound, "/")
 }

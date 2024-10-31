@@ -6,7 +6,8 @@
     <title>ForAuth</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <!--Favicon-->
+    <link href="data:image/x-icon;base64,{{ .Config.Icon }}" rel="icon" type="image/x-icon" />
     {{ if eq .Config.NodePath "" }}
     <!-- Font for icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -20,9 +21,6 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
         <div class="container-lg">
-          <a class="navbar-brand" href="/">
-            <img src="/fs/public/favicon.png" style="width: 2em"/>
-          </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -30,13 +28,11 @@
           <div class="collapse navbar-collapse" id="navbarsExample03">
             <ul class="navbar-nav me-auto mb-2 mb-sm-0">
               <li class="nav-item">
-                <a class="nav-link active" href="/config/">Config</a>
+                <a class="nav-link active" href="http://{{ .Config.Host }}:{{ .Config.PortConf }}">Config</a>
               </li>
-              {{ if .Config.Auth }}
               <li class="nav-item">
-                <a class="nav-link active" href="/login/?logout=yes">LogOut</a>
+                <a class="nav-link active" href="http://{{ .Config.Host }}:{{ .Config.Port }}">Proxy</a>
               </li>
-              {{ end }}
             </ul>
           </div>
         </div>
