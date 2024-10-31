@@ -1,7 +1,7 @@
-project_name: ExerciseDiary
+project_name: ForAuth
 builds:
-  - main: ./cmd/ExerciseDiary/
-    binary: exercisediary
+  - main: ./cmd/ForAuth/
+    binary: forauth
     id: default
     env: [CGO_ENABLED=0]
     goos:
@@ -29,8 +29,8 @@ builds:
 
 nfpms:
   - maintainer: aceberg <aceberg_a@proton.me>
-    description: Workout diary with GitHub-style year visualization  
-    homepage: https://github.com/aceberg/ExerciseDiary
+    description: Session-cookie auth reverse proxy 
+    homepage: https://github.com/aceberg/ForAuth
     license: MIT
     section: utils
     formats:
@@ -39,10 +39,10 @@ nfpms:
     - apk
     - termux.deb
     contents:
-    - src: ./configs/ExerciseDiary.service
-      dst: /lib/systemd/system/ExerciseDiary.service
-    - src: ./configs/ExerciseDiary@.service
-      dst: /lib/systemd/system/ExerciseDiary@.service
+    - src: ./configs/ForAuth.service
+      dst: /lib/systemd/system/ForAuth.service
+    - src: ./configs/ForAuth@.service
+      dst: /lib/systemd/system/ForAuth@.service
     scripts:
       postinstall: ./configs/postinstall.sh
 
@@ -51,10 +51,10 @@ archives:
     - LICENSE
     - README.md
     - CHANGELOG.md
-    - src: ./configs/ExerciseDiary.service
-      dst: ExerciseDiary.service
-    - src: ./configs/ExerciseDiary@.service
-      dst: ExerciseDiary@.service
+    - src: ./configs/ForAuth.service
+      dst: ForAuth.service
+    - src: ./configs/ForAuth@.service
+      dst: ForAuth@.service
     - src: ./configs/install.sh
       dst: install.sh
     wrap_in_directory: true

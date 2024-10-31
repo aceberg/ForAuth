@@ -3,6 +3,7 @@ package web
 import (
 	"html/template"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 
@@ -40,8 +41,9 @@ func Gui(dirPath, nodePath string) {
 	routerConf := gin.Default()
 
 	templ := template.Must(template.New("").ParseFS(templFS, "templates/*"))
-	routerProxy.SetHTMLTemplate(templ) // templates
-	routerConf.SetHTMLTemplate(templ)  // templates
+	routerProxy.SetHTMLTemplate(templ)          // templates
+	routerConf.SetHTMLTemplate(templ)           // templates
+	routerConf.StaticFS("/fs/", http.FS(pubFS)) // public
 
 	routerProxy.GET("/*any", loginHandler)  // login.go
 	routerProxy.POST("/*any", loginHandler) // login.go

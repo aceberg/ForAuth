@@ -2,6 +2,7 @@ package web
 
 import (
 	"log"
+	// "fmt"
 	"net/http"
 	"net/http/httputil"
 
@@ -9,6 +10,7 @@ import (
 
 	"github.com/aceberg/ForAuth/internal/auth"
 	"github.com/aceberg/ForAuth/internal/models"
+	"github.com/aceberg/ForAuth/internal/notify"
 )
 
 func loginHandler(c *gin.Context) {
@@ -40,7 +42,9 @@ func loginScreen(c *gin.Context) {
 
 	if username == authConf.User && auth.MatchPasswords(authConf.Password, password) {
 
-		log.Println("INFO: user '"+username+"' logged in. Session expire time", authConf.Expire)
+		msg := "User '" + username + "' logged in. Session expires in " + authConf.Expire.String() + ". Target: " + appConfig.Target
+		log.Println("INFO:", msg)
+		notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
 		auth.StartSession(c)
 

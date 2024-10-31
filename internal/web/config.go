@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/aceberg/ForAuth/internal/auth"
+	"github.com/aceberg/ForAuth/internal/check"
 	"github.com/aceberg/ForAuth/internal/conf"
 	"github.com/aceberg/ForAuth/internal/models"
 )
@@ -30,6 +31,11 @@ func configHandler(c *gin.Context) {
 
 		guiData.Themes = []string{"cerulean", "cosmo", "cyborg", "darkly", "emerald", "flatly", "grass", "grayscale", "journal", "litera", "lumen", "lux", "materia", "minty", "morph", "ocean", "pulse", "quartz", "sand", "sandstone", "simplex", "sketchy", "slate", "solar", "spacelab", "superhero", "united", "vapor", "wood", "yeti", "zephyr"}
 
+		file, err := pubFS.ReadFile("public/version")
+		check.IfError(err)
+		version := string(file)
+		guiData.Version = version[8:]
+
 		c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "config.html", guiData)
 	} else {
@@ -48,6 +54,7 @@ func saveConfigHandler(c *gin.Context) {
 		appConfig.Theme = c.PostForm("theme")
 		appConfig.Color = c.PostForm("color")
 		appConfig.NodePath = c.PostForm("nodepath")
+		appConfig.Notify = c.PostForm("notify")
 
 		conf.Write(appConfig, authConf)
 

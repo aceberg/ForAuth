@@ -16,6 +16,7 @@ type Conf struct {
 	NodePath string
 	Target   string
 	Icon     string
+	Notify   string
 }
 
 // GuiData - web gui data

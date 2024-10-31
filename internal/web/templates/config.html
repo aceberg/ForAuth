@@ -47,6 +47,12 @@
                 <td><input name="nodepath" type="text" class="form-control" value="{{ .Config.NodePath }}"></td>
               </tr>
               <tr>
+                <td>Notify URL</td>
+                <td>
+                  <textarea name="notify" class="form-control" style="width: 100%;" rows="3" wrap="soft">{{ .Config.Notify }}</textarea>
+                </td>
+              </tr>
+              <tr>
                 <td><button type="submit" class="btn btn-primary">Save</button></td>
                 <td></td>
               </tr>
