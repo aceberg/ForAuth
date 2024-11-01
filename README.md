@@ -9,13 +9,39 @@
 
 ForAuth (Forward Auth) - simple reverse proxy with session-cookie auth and notifications on login.
 
-![Screenshot](https://raw.githubusercontent.com/aceberg/forauth/main/assets/Screenshot.png)
+- [Security](https://github.com/aceberg/forauth#security)
+- [Quick start](https://github.com/aceberg/forauth#quick-start)
+- [Config](https://github.com/aceberg/forauth#config)
+- [Options](https://github.com/aceberg/forauth#options)
+- [Local network only](https://github.com/aceberg/forauth#local-network-only)
+- [CURL](https://github.com/aceberg/forauth#curl)
+- [Thanks](https://github.com/aceberg/forauth#thanks)
 
+![Screenshot](https://raw.githubusercontent.com/aceberg/forauth/main/assets/Screenshot.png)    
+<details>
+  <summary>Screenshot 2</summary>
+
+![Screenshot1](https://raw.githubusercontent.com/aceberg/forauth/main/assets/Screenshot1.png)
+</details>
+
+## Securuty
+- This app is only safe when used with `https`
+- Use strong password
+- Make sure direct access to Target app is closed with firewall or other measures
+
+## Quick start
+```sh
+docker run --name forauth \
+    -v ~/.dockerdata/ForAuth:/data/ForAuth \
+    -p 8800:8800 \ # Proxy port
+    -p 8801:8801 \ # Config port
+    aceberg/forauth
+```
+Then open Config page in browser and set up Auth and Target app.
 
 ## Config
 
-
-Configuration can be done through config file or environment variables
+Configuration can be done through config file or environment variables. Variable names is `config.yaml` file are the same, but in lowcase.
 
 | Variable  | Description | Default |
 | --------  | ----------- | ------- |
@@ -47,19 +73,25 @@ Configuration can be done through config file or environment variables
 By default, this app pulls themes, icons and fonts from the internet. But, in some cases, it may be useful to have an independent from global network setup. I created a separate [image](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap) with all necessary modules and fonts.    
 ```sh
 docker run --name node-bootstrap       \
-    -v ~/.dockerdata/icons:/app/icons  \ # For local images
     -p 8850:8850                       \
     aceberg/node-bootstrap
 ```
 ```sh
-docker run --name exdiary \
-    -v ~/.dockerdata/forauth:/data/forauth \
-    -p 8851:8851 \
+docker run --name forauth \
+    -v ~/.dockerdata/ForAuth:/data/ForAuth \
+    -p 8800:8800 \
+    -p 8801:8801 \
     aceberg/forauth -n "http://$YOUR_IP:8850"
 ```
-Or use [docker-compose](docker-compose-local.yml)
+## CURL
+To access Target app with `curl`:
 
-
+```sh
+curl -X POST http://localhost:8800 -H "Content-Type: application/x-www-form-urlencoded" -d "username=user&password=pw" -c fileCookie
+```
+```sh
+curl http://localhost:8800 -b fileCookie
+```
 
 ## Thanks
 - All go packages listed in [dependencies](https://github.com/aceberg/forauth/network/dependencies)

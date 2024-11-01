@@ -45,8 +45,13 @@ func Gui(dirPath, nodePath string) {
 	routerConf.SetHTMLTemplate(templ)           // templates
 	routerConf.StaticFS("/fs/", http.FS(pubFS)) // public
 
-	routerProxy.GET("/*any", loginHandler)  // login.go
-	routerProxy.POST("/*any", loginHandler) // login.go
+	routerProxy.GET("/*any", loginHandler)     // login.go
+	routerProxy.POST("/*any", loginHandler)    // login.go
+	routerProxy.PUT("/*any", loginHandler)     // login.go
+	routerProxy.DELETE("/*any", loginHandler)  // login.go
+	routerProxy.PATCH("/*any", loginHandler)   // login.go
+	routerProxy.HEAD("/*any", loginHandler)    // login.go
+	routerProxy.OPTIONS("/*any", loginHandler) // login.go
 
 	routerConf.GET("/", configHandler)              // config.go
 	routerConf.GET("/logout", logoutHandler)        // config.go
