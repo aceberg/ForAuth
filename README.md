@@ -29,7 +29,7 @@ Configuration can be done through config file or environment variables
 | FA_HOST | Listen address for both Config and Proxy | 0.0.0.0 |
 | FA_PORT   | Port for Proxy | 8800 |
 | FA_PORTCONF   | Port for Config page | 8801 |
-| FA_TARGET   | Where to proxy after login (host:port). Example: `0.0.0.0:8840` |  |
+| FA_TARGET   | Where to proxy after login (host:port). Example: `192.168.1.1:8840` |  |
 | FA_THEME | Any theme name from https://bootswatch.com in lowcase or [additional](https://github.com/aceberg/aceberg-bootswatch-fork) (emerald, grass, grayscale, ocean, sand, wood)| united |
 | FA_COLOR | Background color: light or dark | dark |
 | FA_NODEPATH   | Path to local JS and Themes ([node-bootstrap](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap)) |  |

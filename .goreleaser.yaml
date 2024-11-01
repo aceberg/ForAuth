@@ -29,7 +29,7 @@ builds:
 
 nfpms:
   - maintainer: aceberg <aceberg_a@proton.me>
-    description: Session-cookie auth reverse proxy 
+    description: Reverse proxy with session-cookie auth 
     homepage: https://github.com/aceberg/ForAuth
     license: MIT
     section: utils

@@ -5,7 +5,7 @@ COPY . /src
 RUN cd /src/cmd/ForAuth/ && CGO_ENABLED=0 go build -o /ForAuth .
 
 
-FROM scratch
+FROM alpine
 
 WORKDIR /data/ForAuth
 WORKDIR /app

@@ -10,7 +10,7 @@
             <table class="table table-borderless">
             <form action="/config/" method="post">
               <tr>
-                <td>Proxy Host</td>
+                <td>Host</td>
                 <td><input name="host" type="text" class="form-control" value="{{ .Config.Host }}"></td>
               </tr>
               <tr>
@@ -104,8 +104,12 @@
       <div class="card border-primary mb-4">
         <div class="card-header">About (<a href="https://github.com/aceberg/ForAuth/releases/tag/{{ .Version }}" target="_blank">{{ .Version }}</a>)</div>
         <div class="card-body">
-          <p>If you find this app useful, please, <a href="https://github.com/aceberg#donate" target="_blank">donate</a></p>
-          <p>Commission you own app (Golang, HTML/JS). Contact and prices <a href="https://github.com/aceberg" target="_blank">here</a></p>
+          <p><b>● Proxy Port</b> - default 8800</p>
+          <p><b>● Config Port</b> - config GUI can be reached on this port. Default 8801</p>
+          <p><b>● Target</b> - where to proxy after login (host:port). Example: <code>192.168.1.1:8840</code></p>
+          <p><b>● Node path</b> - path to local Fonts and Themes (<a href="https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap">node-bootstrap</a>)</p>
+          <p><b>● Notify URL</b> - provides notifications to Discord, Email, Gotify, Telegram and other services. <a href="https://containrrr.dev/shoutrrr/v0.8/">Link to documentation</a></p>
+          <p><b>● </b>If you find this app useful, please, <a href="https://github.com/aceberg#donate" target="_blank">donate</a></p>
         </div>
       </div>
     </div>

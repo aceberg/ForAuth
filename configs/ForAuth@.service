@@ -1,0 +1,13 @@
+[Unit]
+Description=ForAuth
+Documentation=https://github.com/aceberg/ForAuth
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=%i
+ExecStart=/usr/bin/forauth -d /home/%i/.config/ForAuth/
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
