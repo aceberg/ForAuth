@@ -1,6 +1,6 @@
 [![Main-Docker](https://github.com/aceberg/forauth/actions/workflows/main-docker.yml/badge.svg)](https://github.com/aceberg/forauth/actions/workflows/main-docker.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/aceberg/forauth)](https://goreportcard.com/report/github.com/aceberg/forauth)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e8f67994120fc7936aeb/maintainability)](https://codeclimate.com/github/aceberg/forauth/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e8f67994120fc7936aeb/maintainability)](https://codeclimate.com/github/aceberg/ForAuth/maintainability)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/aceberg/forauth)
 
 <h1><a href="https://github.com/aceberg/forauth">
@@ -41,7 +41,7 @@ Then open Config page in browser and set up Auth and Target app.
 
 ## Config
 
-Configuration can be done through config file or environment variables. Variable names is `config.yaml` file are the same, but in lowcase.
+Configuration can be done through config file, GUI or environment variables. Variable names is `config.yaml` file are the same, but in lowcase.
 
 | Variable  | Description | Default |
 | --------  | ----------- | ------- |
