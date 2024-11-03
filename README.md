@@ -1,4 +1,4 @@
-[![Main-Docker](https://github.com/aceberg/forauth/actions/workflows/main-docker.yml/badge.svg)](https://github.com/aceberg/forauth/actions/workflows/main-docker.yml)
+[![Main-Docker](https://github.com/aceberg/ForAuth/actions/workflows/main-docker-all.yml/badge.svg)](https://github.com/aceberg/ForAuth/actions/workflows/main-docker-all.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/aceberg/forauth)](https://goreportcard.com/report/github.com/aceberg/forauth)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e8f67994120fc7936aeb/maintainability)](https://codeclimate.com/github/aceberg/ForAuth/maintainability)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/aceberg/forauth)
@@ -37,7 +37,9 @@ docker run --name forauth \
     -p 8801:8801 \ # Config port
     aceberg/forauth
 ```
-Then open Config page in browser and set up Auth and Target app.
+Then open Config page in browser and set up Auth and Target app.   
+
+Example [docker-compose-auth.yml](https://github.com/aceberg/WatchYourPorts/blob/main/docker-compose-auth.yml) for [WatchYourPorts](https://github.com/aceberg/WatchYourPorts). This should work with other apps too.
 
 ## Config
 
