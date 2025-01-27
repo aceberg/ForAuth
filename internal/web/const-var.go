@@ -13,6 +13,9 @@ var (
 
 	// authConf - config for auth
 	authConf auth.Conf
+
+	// targetMap - targets
+	targetMap map[string]string
 )
 
 // templFS - html templates

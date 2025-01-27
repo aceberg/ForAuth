@@ -13,6 +13,7 @@ type Conf struct {
 	Color    string
 	DirPath  string
 	ConfPath string
+	YamlPath string
 	NodePath string
 	Target   string
 	Icon     string
@@ -21,8 +22,9 @@ type Conf struct {
 
 // GuiData - web gui data
 type GuiData struct {
-	Config  Conf
-	Themes  []string
-	Version string
-	Auth    auth.Conf
+	Config    Conf
+	Themes    []string
+	Version   string
+	Auth      auth.Conf
+	TargetMap map[string]string
 }

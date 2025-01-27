@@ -10,6 +10,7 @@ import (
 	"github.com/aceberg/ForAuth/internal/check"
 	"github.com/aceberg/ForAuth/internal/conf"
 	"github.com/aceberg/ForAuth/internal/models"
+	"github.com/aceberg/ForAuth/internal/yaml"
 )
 
 func logoutHandler(c *gin.Context) {
@@ -28,6 +29,7 @@ func configHandler(c *gin.Context) {
 	if authOk {
 		guiData.Config = appConfig
 		guiData.Auth = authConf
+		guiData.TargetMap = yaml.Read(appConfig.YamlPath)
 
 		guiData.Themes = []string{"cerulean", "cosmo", "cyborg", "darkly", "emerald", "flatly", "grass", "grayscale", "journal", "litera", "lumen", "lux", "materia", "minty", "morph", "ocean", "pulse", "quartz", "sand", "sandstone", "simplex", "sketchy", "slate", "solar", "spacelab", "superhero", "united", "vapor", "wood", "yeti", "zephyr"}
 
@@ -39,7 +41,7 @@ func configHandler(c *gin.Context) {
 		c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "config.html", guiData)
 	} else {
-		loginScreen(c) // login.go
+		loginScreen(c, appConfig.Host+":"+appConfig.PortConf) // login.go
 	}
 }
 
@@ -92,5 +94,29 @@ func saveConfigAuth(c *gin.Context) {
 		conf.Write(appConfig, authConf)
 	}
 
+	c.Redirect(http.StatusFound, "/")
+}
+
+func addTargetHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		proxy := c.PostForm("proxy")
+		target := c.PostForm("target")
+
+		targetMap = yaml.Read(appConfig.YamlPath)
+		targetMap[proxy] = target
+		yaml.Write(appConfig.YamlPath, targetMap)
+	}
+	c.Redirect(http.StatusFound, "/")
+}
+
+func delTargetHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		key := c.Param("key")
+		log.Println("DEL", key)
+	}
 	c.Redirect(http.StatusFound, "/")
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/aceberg/ForAuth/internal/check"
 	"github.com/aceberg/ForAuth/internal/conf"
+	"github.com/aceberg/ForAuth/internal/yaml"
 )
 
 // Gui - start web server
@@ -25,15 +26,19 @@ func Gui(dirPath, nodePath string) {
 	}
 	appConfig.Icon = icon
 
+	appConfig.YamlPath = dirPath + "/targets.yaml"
+	check.Path(appConfig.YamlPath)
+	targetMap = yaml.Read(appConfig.YamlPath)
+
 	log.Println("INFO: starting web gui with config", appConfig.ConfPath)
 
 	addressProxy := appConfig.Host + ":" + appConfig.Port
 	addressConf := appConfig.Host + ":" + appConfig.PortConf
 
+	targetMap[addressProxy] = appConfig.Target
+
 	log.Println("=================================== ")
-	log.Printf("Config at http://%s", addressConf)
-	log.Println("=================================== ")
-	log.Printf("Proxy at http://%s", addressProxy)
+	log.Println("Config at http://" + addressConf)
 	log.Println("=================================== ")
 
 	gin.SetMode(gin.ReleaseMode)
@@ -53,17 +58,23 @@ func Gui(dirPath, nodePath string) {
 	routerProxy.HEAD("/*any", loginHandler)    // login.go
 	routerProxy.OPTIONS("/*any", loginHandler) // login.go
 
-	routerConf.GET("/", configHandler)              // config.go
-	routerConf.GET("/logout", logoutHandler)        // config.go
-	routerConf.POST("/", configHandler)             // config.go
-	routerConf.POST("/config/", saveConfigHandler)  // config.go
-	routerConf.POST("/config/auth", saveConfigAuth) // config.go
+	routerConf.GET("/", configHandler)                  // config.go
+	routerConf.GET("/logout", logoutHandler)            // config.go
+	routerConf.GET("/target/del:key", delTargetHandler) // config.go
+	routerConf.POST("/", configHandler)                 // config.go
+	routerConf.POST("/config/", saveConfigHandler)      // config.go
+	routerConf.POST("/config/auth", saveConfigAuth)     // config.go
+	routerConf.POST("/target/add", addTargetHandler)    // config.go
 
-	go func() {
-		err := routerConf.Run(addressConf)
-		check.IfError(err)
-	}()
+	for proxy, target := range targetMap {
+		log.Println("Proxy at http://"+proxy, "=> http://"+target)
+		log.Println("=================================== ")
+		go func() {
+			err := routerProxy.Run(proxy)
+			check.IfError(err)
+		}()
+	}
 
-	err := routerProxy.Run(addressProxy)
+	err := routerConf.Run(addressConf)
 	check.IfError(err)
 }

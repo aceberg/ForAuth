@@ -14,27 +14,35 @@ import (
 )
 
 func loginHandler(c *gin.Context) {
+	var target string
+	var ok bool
+
+	reqHost := c.Request.Host
+	target, ok = targetMap[reqHost]
+	if !ok {
+		target = appConfig.Target
+	}
 
 	authOk := auth.Auth(c, &authConf)
 	if authOk {
-		reverseProxy(c)
+		reverseProxy(c, target)
 	} else {
-		loginScreen(c)
+		loginScreen(c, target)
 	}
 }
 
-func reverseProxy(c *gin.Context) {
+func reverseProxy(c *gin.Context, target string) {
 
 	director := func(req *http.Request) {
 		req.URL.Scheme = "http"
-		req.URL.Host = appConfig.Target
+		req.URL.Host = target
 	}
 
 	proxy := &httputil.ReverseProxy{Director: director}
 	proxy.ServeHTTP(c.Writer, c.Request)
 }
 
-func loginScreen(c *gin.Context) {
+func loginScreen(c *gin.Context, target string) {
 	var guiData models.GuiData
 
 	username := c.PostForm("username")
@@ -42,7 +50,7 @@ func loginScreen(c *gin.Context) {
 
 	if username == authConf.User && auth.MatchPasswords(authConf.Password, password) {
 
-		msg := "User '" + username + "' logged in. Session expires in " + authConf.Expire.String() + ". Target: " + appConfig.Target
+		msg := "User '" + username + "' logged in. Session expires in " + authConf.Expire.String() + ". Target: " + target
 		log.Println("INFO:", msg)
 		notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
