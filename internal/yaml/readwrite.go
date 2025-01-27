@@ -16,7 +16,7 @@ func Read(path string) map[string]models.TargetStruct {
 	file, err := os.ReadFile(path)
 	check.IfError(err)
 
-	var items map[string]models.TargetStruct
+	items := make(map[string]models.TargetStruct)
 	err = yaml.Unmarshal(file, &items)
 	check.IfError(err)
 
