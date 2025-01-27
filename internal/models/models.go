@@ -16,8 +16,13 @@ type Conf struct {
 	YamlPath string
 	NodePath string
 	Target   string
-	Icon     string
 	Notify   string
+}
+
+// TargetStruct - for Multi Target
+type TargetStruct struct {
+	Name   string `yaml:"name"`
+	Target string `yaml:"target"`
 }
 
 // GuiData - web gui data
@@ -26,5 +31,5 @@ type GuiData struct {
 	Themes    []string
 	Version   string
 	Auth      auth.Conf
-	TargetMap map[string]string
+	TargetMap map[string]TargetStruct
 }

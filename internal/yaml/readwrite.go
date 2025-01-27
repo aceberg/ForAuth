@@ -7,15 +7,16 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/aceberg/ForAuth/internal/check"
+	"github.com/aceberg/ForAuth/internal/models"
 )
 
 // Read - read .yaml file to struct
-func Read(path string) map[string]string {
+func Read(path string) map[string]models.TargetStruct {
 
 	file, err := os.ReadFile(path)
 	check.IfError(err)
 
-	var items map[string]string
+	var items map[string]models.TargetStruct
 	err = yaml.Unmarshal(file, &items)
 	check.IfError(err)
 
@@ -23,7 +24,7 @@ func Read(path string) map[string]string {
 }
 
 // Write - write struct to  .yaml file
-func Write(path string, items map[string]string) {
+func Write(path string, items map[string]models.TargetStruct) {
 
 	yamlData, err := yaml.Marshal(&items)
 	check.IfError(err)

@@ -101,11 +101,11 @@ func addTargetHandler(c *gin.Context) {
 
 	authOk := auth.Auth(c, &authConf)
 	if authOk {
+		name := c.PostForm("name")
 		proxy := c.PostForm("proxy")
 		target := c.PostForm("target")
 
-		targetMap = yaml.Read(appConfig.YamlPath)
-		targetMap[proxy] = target
+		targetMap[proxy] = models.TargetStruct{Name: name, Target: target}
 		yaml.Write(appConfig.YamlPath, targetMap)
 	}
 	c.Redirect(http.StatusFound, "/")
@@ -115,8 +115,10 @@ func delTargetHandler(c *gin.Context) {
 
 	authOk := auth.Auth(c, &authConf)
 	if authOk {
-		key := c.Param("key")
-		log.Println("DEL", key)
+		key := c.Query("key")
+
+		delete(targetMap, key)
+		yaml.Write(appConfig.YamlPath, targetMap)
 	}
-	c.Redirect(http.StatusFound, "/")
+	c.Redirect(http.StatusFound, c.Request.Referer())
 }

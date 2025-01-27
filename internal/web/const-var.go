@@ -15,7 +15,7 @@ var (
 	authConf auth.Conf
 
 	// targetMap - targets
-	targetMap map[string]string
+	targetMap map[string]models.TargetStruct
 )
 
 // templFS - html templates

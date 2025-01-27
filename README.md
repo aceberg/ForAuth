@@ -1,13 +1,12 @@
 [![Main-Docker](https://github.com/aceberg/ForAuth/actions/workflows/main-docker-all.yml/badge.svg)](https://github.com/aceberg/ForAuth/actions/workflows/main-docker-all.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/aceberg/forauth)](https://goreportcard.com/report/github.com/aceberg/forauth)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e8f67994120fc7936aeb/maintainability)](https://codeclimate.com/github/aceberg/ForAuth/maintainability)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/aceberg/forauth)
 
 <h1><a href="https://github.com/aceberg/forauth">
     <img src="https://raw.githubusercontent.com/aceberg/forauth/main/assets/logo.png" width="35" />
 </a>ForAuth</h1>
 
-ForAuth (Forward Auth) - simple reverse proxy with session-cookie auth and notifications on login.
+ForAuth (Forward Auth) - simple auth app (session-cookie) with multiple targets support and notifications on login
 
 - [Security](https://github.com/aceberg/forauth#security)
 - [Quick start](https://github.com/aceberg/forauth#quick-start)

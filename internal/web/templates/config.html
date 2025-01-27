@@ -66,6 +66,7 @@
           <table class="table table-borderless">
             <thead>
               <tr>
+                <th>Name</th>
                 <th>Proxy (host:port)</th>
                 <th>Target (host:port)</th>
                 <th>Del</th>
@@ -74,16 +75,18 @@
             <tbody>
               {{ range $key, $value := .TargetMap }}
               <tr>
+                <td>{{ $value.Name }}</td>
                 <td><a href="http://{{ $key }}" target="_blank">{{ $key }}</a></td>
-                <td><a href="http://{{ $value }}" target="_blank">{{ $value }}</a></td>
-                <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+                <td><a href="http://{{ $value.Target }}" target="_blank">{{ $value.Target }}</a></td>
+                <td><a href="/target/del/?key={{ $key }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
                   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                </svg></td>
+                </svg></a></td>
               </tr>
               {{ end }}
               <tr>
                 <form action="/target/add/" method="post">
+                  <td><input name="name" type="text" class="form-control" placeholder="Name"></td>
                   <td><input name="proxy" type="text" class="form-control" placeholder="0.0.0.0:8888"></td>
                   <td><input name="target" type="text" class="form-control" placeholder="0.0.0.0:80"></td>
                   <td><button type="submit" class="btn btn-primary">Add</button></td>
@@ -137,6 +140,9 @@
       <div class="card border-primary mb-4">
         <div class="card-header">About (<a href="https://github.com/aceberg/ForAuth/releases/tag/{{ .Version }}" target="_blank">{{ .Version }}</a>)</div>
         <div class="card-body">
+          <p><i class="text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-square-fill" viewBox="0 0 16 16">
+            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+          </svg> <b>Warning</b></i> - changing any <b>Host</b>, <b>Port</b> or <b>Target</b> requires app restart</p>
           <p><b>● Expire after</b> - session expiration time. A number and suffix: <b>m</b>, <b>h</b>, <b>d</b> or <b>M</b>. Example: <code>7d</code></p>
           <p><b>● Proxy Port</b> - the Target app can be reached on this port after login. Default <code>8800</code></p>
           <p><b>● Config Port</b> - config GUI can be reached on this port. Default <code>8801</code></p>

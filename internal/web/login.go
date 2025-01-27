@@ -15,11 +15,12 @@ import (
 
 func loginHandler(c *gin.Context) {
 	var target string
-	var ok bool
 
-	reqHost := c.Request.Host
-	target, ok = targetMap[reqHost]
-	if !ok {
+	targetStruct, ok := targetMap[c.Request.Host]
+
+	if ok {
+		target = targetStruct.Target
+	} else {
 		target = appConfig.Target
 	}
 

@@ -24,7 +24,6 @@ func Gui(dirPath, nodePath string) {
 	if nodePath != "" {
 		appConfig.NodePath = nodePath
 	}
-	appConfig.Icon = icon
 
 	appConfig.YamlPath = dirPath + "/targets.yaml"
 	check.Path(appConfig.YamlPath)
@@ -32,10 +31,7 @@ func Gui(dirPath, nodePath string) {
 
 	log.Println("INFO: starting web gui with config", appConfig.ConfPath)
 
-	addressProxy := appConfig.Host + ":" + appConfig.Port
 	addressConf := appConfig.Host + ":" + appConfig.PortConf
-
-	targetMap[addressProxy] = appConfig.Target
 
 	log.Println("=================================== ")
 	log.Println("Config at http://" + addressConf)
@@ -58,16 +54,26 @@ func Gui(dirPath, nodePath string) {
 	routerProxy.HEAD("/*any", loginHandler)    // login.go
 	routerProxy.OPTIONS("/*any", loginHandler) // login.go
 
-	routerConf.GET("/", configHandler)                  // config.go
-	routerConf.GET("/logout", logoutHandler)            // config.go
-	routerConf.GET("/target/del:key", delTargetHandler) // config.go
-	routerConf.POST("/", configHandler)                 // config.go
-	routerConf.POST("/config/", saveConfigHandler)      // config.go
-	routerConf.POST("/config/auth", saveConfigAuth)     // config.go
-	routerConf.POST("/target/add", addTargetHandler)    // config.go
+	routerConf.GET("/", configHandler)               // config.go
+	routerConf.GET("/logout", logoutHandler)         // config.go
+	routerConf.GET("/target/del", delTargetHandler)  // config.go
+	routerConf.POST("/", configHandler)              // config.go
+	routerConf.POST("/config/", saveConfigHandler)   // config.go
+	routerConf.POST("/config/auth", saveConfigAuth)  // config.go
+	routerConf.POST("/target/add", addTargetHandler) // config.go
+
+	if appConfig.Port != "" {
+		proxy := appConfig.Host + ":" + appConfig.Port
+		log.Println("Proxy at http://"+proxy, "=> http://"+appConfig.Target)
+		log.Println("=================================== ")
+		go func() {
+			err := routerProxy.Run(proxy)
+			check.IfError(err)
+		}()
+	}
 
 	for proxy, target := range targetMap {
-		log.Println("Proxy at http://"+proxy, "=> http://"+target)
+		log.Println("Proxy at http://"+proxy, "=> http://"+target.Target)
 		log.Println("=================================== ")
 		go func() {
 			err := routerProxy.Run(proxy)
