@@ -38,7 +38,7 @@ func Gui(dirPath, nodePath string) {
 	log.Println("=================================== ")
 
 	gin.SetMode(gin.ReleaseMode)
-	routerConf := gin.Default()
+	routerConf := gin.New()
 
 	templ := template.Must(template.New("").ParseFS(templFS, "templates/*"))
 
@@ -68,7 +68,7 @@ func Gui(dirPath, nodePath string) {
 
 func newRouter(templ *template.Template, proxy, target, name string) {
 
-	routerProxy := gin.Default()
+	routerProxy := gin.New()
 	routerProxy.SetHTMLTemplate(templ) // templates
 
 	// Middleware to add variable to context

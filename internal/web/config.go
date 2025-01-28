@@ -41,7 +41,7 @@ func configHandler(c *gin.Context) {
 		c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "config.html", guiData)
 	} else {
-		loginScreen(c, appConfig.Host+":"+appConfig.PortConf) // login.go
+		loginScreen(c, appConfig.Host+":"+appConfig.PortConf, "Config") // login.go
 	}
 }
 

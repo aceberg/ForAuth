@@ -2,7 +2,6 @@ package web
 
 import (
 	"log"
-	// "fmt"
 	"net/http"
 	"net/http/httputil"
 
@@ -14,24 +13,24 @@ import (
 )
 
 func loginHandler(c *gin.Context) {
-	var target string
+	var target, name string
 
 	proxyAddr := c.MustGet("proxyAddr").(string)
-	log.Println("CONTEXT", proxyAddr)
-
 	targetStruct, ok := targetMap[proxyAddr]
 
 	if ok {
 		target = targetStruct.Target
+		name = targetStruct.Name
 	} else {
 		target = appConfig.Target
+		name = "Default"
 	}
 
 	authOk := auth.Auth(c, &authConf)
 	if authOk {
 		reverseProxy(c, target)
 	} else {
-		loginScreen(c, target)
+		loginScreen(c, target, name)
 	}
 }
 
@@ -46,7 +45,7 @@ func reverseProxy(c *gin.Context, target string) {
 	proxy.ServeHTTP(c.Writer, c.Request)
 }
 
-func loginScreen(c *gin.Context, target string) {
+func loginScreen(c *gin.Context, target, name string) {
 	var guiData models.GuiData
 
 	username := c.PostForm("username")
@@ -54,7 +53,7 @@ func loginScreen(c *gin.Context, target string) {
 
 	if username == authConf.User && auth.MatchPasswords(authConf.Password, password) {
 
-		msg := "User '" + username + "' logged in. Session expires in " + authConf.Expire.String() + ". Target: " + target
+		msg := "User '" + username + "' logged in from " + c.Request.RemoteAddr + ". Session expires in " + authConf.Expire.String() + ". Target: " + target + " (" + name + ")"
 		log.Println("INFO:", msg)
 		notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
