@@ -6,7 +6,7 @@
     <img src="https://raw.githubusercontent.com/aceberg/forauth/main/assets/logo.png" width="35" />
 </a>ForAuth</h1>
 
-ForAuth (Forward Auth) - simple auth app (session-cookie) with multiple targets support and notifications on login
+ForAuth (Forward Auth) - simple auth app (session-cookie) with notifications on login
 
 - [Security](https://github.com/aceberg/forauth#security)
 - [Quick start](https://github.com/aceberg/forauth#quick-start)
