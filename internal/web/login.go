@@ -16,7 +16,10 @@ import (
 func loginHandler(c *gin.Context) {
 	var target string
 
-	targetStruct, ok := targetMap[c.Request.Host]
+	proxyAddr := c.MustGet("proxyAddr").(string)
+	log.Println("CONTEXT", proxyAddr)
+
+	targetStruct, ok := targetMap[proxyAddr]
 
 	if ok {
 		target = targetStruct.Target

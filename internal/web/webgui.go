@@ -38,21 +38,12 @@ func Gui(dirPath, nodePath string) {
 	log.Println("=================================== ")
 
 	gin.SetMode(gin.ReleaseMode)
-	routerProxy := gin.Default()
 	routerConf := gin.Default()
 
 	templ := template.Must(template.New("").ParseFS(templFS, "templates/*"))
-	routerProxy.SetHTMLTemplate(templ)          // templates
+
 	routerConf.SetHTMLTemplate(templ)           // templates
 	routerConf.StaticFS("/fs/", http.FS(pubFS)) // public
-
-	routerProxy.GET("/*any", loginHandler)     // login.go
-	routerProxy.POST("/*any", loginHandler)    // login.go
-	routerProxy.PUT("/*any", loginHandler)     // login.go
-	routerProxy.DELETE("/*any", loginHandler)  // login.go
-	routerProxy.PATCH("/*any", loginHandler)   // login.go
-	routerProxy.HEAD("/*any", loginHandler)    // login.go
-	routerProxy.OPTIONS("/*any", loginHandler) // login.go
 
 	routerConf.GET("/", configHandler)               // config.go
 	routerConf.GET("/logout", logoutHandler)         // config.go
@@ -64,23 +55,39 @@ func Gui(dirPath, nodePath string) {
 
 	if appConfig.Port != "" {
 		proxy := appConfig.Host + ":" + appConfig.Port
-		log.Println("Proxy at http://"+proxy, "=> http://"+appConfig.Target)
-		log.Println("=================================== ")
-		go func() {
-			err := routerProxy.Run(proxy)
-			check.IfError(err)
-		}()
+		go newRouter(templ, proxy, appConfig.Target, "Default")
 	}
 
 	for proxy, target := range targetMap {
-		log.Println("Proxy at http://"+proxy, "=> http://"+target.Target)
-		log.Println("=================================== ")
-		go func() {
-			err := routerProxy.Run(proxy)
-			check.IfError(err)
-		}()
+		go newRouter(templ, proxy, target.Target, target.Name)
 	}
 
 	err := routerConf.Run(addressConf)
+	check.IfError(err)
+}
+
+func newRouter(templ *template.Template, proxy, target, name string) {
+
+	routerProxy := gin.Default()
+	routerProxy.SetHTMLTemplate(templ) // templates
+
+	// Middleware to add variable to context
+	routerProxy.Use(func(c *gin.Context) {
+		c.Set("proxyAddr", proxy)
+		c.Next()
+	})
+
+	routerProxy.GET("/*any", loginHandler)     // login.go
+	routerProxy.POST("/*any", loginHandler)    // login.go
+	routerProxy.PUT("/*any", loginHandler)     // login.go
+	routerProxy.DELETE("/*any", loginHandler)  // login.go
+	routerProxy.PATCH("/*any", loginHandler)   // login.go
+	routerProxy.HEAD("/*any", loginHandler)    // login.go
+	routerProxy.OPTIONS("/*any", loginHandler) // login.go
+
+	log.Println("Proxy at http://"+proxy, "=> http://"+target, "("+name+")")
+	log.Println("=================================== ")
+
+	err := routerProxy.Run(proxy)
 	check.IfError(err)
 }
