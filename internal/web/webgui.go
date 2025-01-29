@@ -86,7 +86,6 @@ func newRouter(templ *template.Template, proxy, target, name string) {
 	routerProxy.OPTIONS("/*any", loginHandler) // login.go
 
 	log.Println("Proxy at http://"+proxy, "=> http://"+target, "("+name+")")
-	log.Println("=================================== ")
 
 	err := routerProxy.Run(proxy)
 	check.IfError(err)

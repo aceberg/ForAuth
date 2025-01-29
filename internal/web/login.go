@@ -61,6 +61,12 @@ func loginScreen(c *gin.Context, target, name string) {
 
 		c.Redirect(http.StatusFound, "/")
 	} else {
+		if username != "" {
+			msg := "Incorrect login attempt by '" + username + "' with password '" + password + "' logged in from " + c.Request.RemoteAddr + ". Target: " + target + " (" + name + ")"
+			log.Println("WARNING:", msg)
+			notify.Shout("ForAuth: "+msg, appConfig.Notify)
+		}
+
 		guiData.Config = appConfig
 
 		c.HTML(http.StatusOK, "header.html", guiData)
