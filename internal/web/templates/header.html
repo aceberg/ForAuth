@@ -20,12 +20,16 @@
     <div class="container-lg">
       <ul class="nav navbar-nav me-auto mb-2 mb-sm-0">
         <li class="nav-item">
-          <a class="nav-link active" href="http://{{ .Config.Host }}:{{ .Config.PortConf }}">Config</a>
+          <a class="nav-link active" id="link-conf">Config</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="http://{{ .Config.Host }}:{{ .Config.Port }}">Proxy</a>
+          <a class="nav-link active" id="link-proxy">Proxy</a>
         </li>
       </ul>
     </div>
   </nav>
+<script>
+  document.getElementById("link-conf").href = 'http://' + window.location.hostname + ':' + '{{ .Config.PortConf }}';
+  document.getElementById("link-proxy").href = 'http://' + window.location.hostname + ':' + '{{ .Config.Port }}';
+</script>
 {{ end }}
