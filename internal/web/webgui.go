@@ -12,6 +12,8 @@ import (
 	"github.com/aceberg/ForAuth/internal/yaml"
 )
 
+var templ *template.Template
+
 // Gui - start web server
 func Gui(dirPath, nodePath string) {
 
@@ -27,7 +29,6 @@ func Gui(dirPath, nodePath string) {
 
 	appConfig.YamlPath = dirPath + "/targets.yaml"
 	check.Path(appConfig.YamlPath)
-	targetMap = yaml.Read(appConfig.YamlPath)
 
 	log.Println("INFO: starting web gui with config", appConfig.ConfPath)
 
@@ -40,7 +41,7 @@ func Gui(dirPath, nodePath string) {
 	gin.SetMode(gin.ReleaseMode)
 	routerConf := gin.New()
 
-	templ := template.Must(template.New("").ParseFS(templFS, "templates/*"))
+	templ = template.Must(template.New("").ParseFS(templFS, "templates/*"))
 
 	routerConf.SetHTMLTemplate(templ)           // templates
 	routerConf.StaticFS("/fs/", http.FS(pubFS)) // public
@@ -55,18 +56,19 @@ func Gui(dirPath, nodePath string) {
 
 	if appConfig.Port != "" {
 		proxy := appConfig.Host + ":" + appConfig.Port
-		go newRouter(templ, proxy, appConfig.Target, "Default")
+		go newRouter(proxy, appConfig.Target, "Default")
 	}
 
+	targetMap = yaml.Read(appConfig.YamlPath)
 	for proxy, target := range targetMap {
-		go newRouter(templ, proxy, target.Target, target.Name)
+		go newRouter(proxy, target.Target, target.Name)
 	}
 
 	err := routerConf.Run(addressConf)
 	check.IfError(err)
 }
 
-func newRouter(templ *template.Template, proxy, target, name string) {
+func newRouter(proxy, target, name string) {
 
 	routerProxy := gin.New()
 	routerProxy.SetHTMLTemplate(templ) // templates

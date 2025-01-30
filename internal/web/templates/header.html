@@ -25,6 +25,11 @@
         <li class="nav-item">
           <a class="nav-link active" id="link-proxy">Proxy</a>
         </li>
+        {{ if not .HideLogout }}
+        <li class="nav-item">
+          <a class="nav-link active" href="/logout">Logout</a>
+        </li>
+        {{ end }}
       </ul>
     </div>
   </nav>

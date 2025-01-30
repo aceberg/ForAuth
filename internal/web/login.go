@@ -68,6 +68,7 @@ func loginScreen(c *gin.Context, target, name string) {
 		}
 
 		guiData.Config = appConfig
+		guiData.HideLogout = true
 
 		c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "login.html", guiData)
