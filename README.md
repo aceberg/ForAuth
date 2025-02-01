@@ -6,12 +6,13 @@
     <img src="https://raw.githubusercontent.com/aceberg/forauth/main/assets/logo.png" width="35" />
 </a>ForAuth</h1>
 
-ForAuth (Forward Auth) - simple auth app (session-cookie) with notifications on login
+ForAuth (Forward Auth) - simple auth app (session-cookie) with notifications on login and [multiple targets](https://github.com/aceberg/forauth#multiple-targets) option
 
 - [Security](https://github.com/aceberg/forauth#security)
 - [Quick start](https://github.com/aceberg/forauth#quick-start)
 - [Config](https://github.com/aceberg/forauth#config)
 - [Options](https://github.com/aceberg/forauth#options)
+- [Multiple Targets](https://github.com/aceberg/forauth#multiple-targets)
 - [Local network only](https://github.com/aceberg/forauth#local-network-only)
 - [CURL](https://github.com/aceberg/forauth#curl)
 - [Thanks](https://github.com/aceberg/forauth#thanks)
@@ -69,6 +70,23 @@ Configuration can be done through config file, GUI or environment variables. Var
 | --------  | ----------- | ------- | 
 | -d | Path to config dir | /data/ForAuth | 
 | -n | Path to local JS and Themes ([node-bootstrap](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap)) |  | 
+
+## Multiple Targets
+Multiple Targets can be gonfigured from `Config` page or in `targets.yaml` file inside the config dir.
+
+<details>
+  <summary>Example:</summary>
+
+```yaml
+0.0.0.0:8854:               # where proxy will listen
+    name: DiaryMD           # name
+    target: 127.0.0.1:8754  # where an app listens
+0.0.0.0:8855:
+    name: AnyAppStart
+    target: 127.0.0.1:8755
+```
+
+</details>
 
 ## Local network only
 By default, this app pulls themes, icons and fonts from the internet. But, in some cases, it may be useful to have an independent from global network setup. I created a separate [image](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap) with all necessary modules and fonts.    
