@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -8,12 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
+var mu sync.Mutex
+
 // StartSession for new login
 func StartSession(c *gin.Context) {
 
 	sessionToken := uuid.NewString()
 
-	allSessions[sessionToken] = time.Now().Add(60 * time.Second)
+	mu.Lock()
+	allSessions[sessionToken] = time.Now().Add(authConf.Expire)
+	mu.Unlock()
 
 	setTokenCookie(c, sessionToken)
 

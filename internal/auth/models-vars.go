@@ -13,6 +13,8 @@ type Conf struct {
 	Expire   time.Duration
 }
 
+var authConf Conf
+
 var allSessions = map[string]time.Time{}
 
 var cookieName = "forauth_session_token"

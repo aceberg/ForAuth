@@ -13,6 +13,7 @@ func Auth(c *gin.Context, conf *Conf) bool {
 		return true
 	}
 
+	authConf = *conf
 	sessionToken := getTokenFromCookie(c)
 
 	userSession, exists := allSessions[sessionToken]
@@ -21,9 +22,6 @@ func Auth(c *gin.Context, conf *Conf) bool {
 		delete(allSessions, sessionToken)
 		return false
 	}
-
-	userSession = time.Now().Add(conf.Expire)
-	allSessions[sessionToken] = userSession
 
 	return true
 }
