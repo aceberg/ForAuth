@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.1.4] - 2025-03-11
+### Added
+- Show current sessions on Config page
+
 ## [0.1.3] - 2025-03-10
 ### Added
 - Log INFO when user session expires
