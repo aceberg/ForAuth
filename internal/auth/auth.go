@@ -18,7 +18,7 @@ func Auth(c *gin.Context, conf *Conf) bool {
 	sessionToken := getTokenFromCookie(c)
 
 	userSession, exists := allSessions[sessionToken]
-	exp := userSession.Before(time.Now())
+	exp := userSession.Expire.Before(time.Now())
 
 	if exists && !exp {
 		return true

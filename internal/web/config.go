@@ -22,14 +22,26 @@ func logoutHandler(c *gin.Context) {
 	}
 }
 
-func configHandler(c *gin.Context) {
-	var guiData models.GuiData
+func sessionDelHandler(c *gin.Context) {
 
 	authOk := auth.Auth(c, &authConf)
 	if authOk {
+		key := c.Query("key")
+		auth.LogOutByToken(key)
+		c.Redirect(http.StatusFound, "/")
+	}
+}
+
+func configHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		var guiData models.GuiData
+
 		guiData.Config = appConfig
 		guiData.Auth = authConf
 		guiData.TargetMap = yaml.Read(appConfig.YamlPath)
+		guiData.Sessions = auth.GetAllSessions()
 
 		guiData.Themes = []string{"cerulean", "cosmo", "cyborg", "darkly", "emerald", "flatly", "grass", "grayscale", "journal", "litera", "lumen", "lux", "materia", "minty", "morph", "ocean", "pulse", "quartz", "sand", "sandstone", "simplex", "sketchy", "slate", "solar", "spacelab", "superhero", "united", "vapor", "wood", "yeti", "zephyr"}
 
@@ -91,6 +103,7 @@ func saveConfigAuth(c *gin.Context) {
 			authConf.Auth = false
 		}
 
+		log.Println("INFO: writing new auth config to", appConfig.ConfPath)
 		conf.Write(appConfig, authConf)
 	}
 

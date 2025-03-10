@@ -49,6 +49,7 @@ func Gui(dirPath, nodePath string) {
 	routerConf.GET("/", configHandler)               // config.go
 	routerConf.GET("/logout", logoutHandler)         // config.go
 	routerConf.GET("/target/del", delTargetHandler)  // config.go
+	routerConf.GET("/session", sessionDelHandler)    // config.go
 	routerConf.POST("/", configHandler)              // config.go
 	routerConf.POST("/config/", saveConfigHandler)   // config.go
 	routerConf.POST("/config/auth", saveConfigAuth)  // config.go

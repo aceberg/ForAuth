@@ -15,6 +15,14 @@ type Conf struct {
 
 var authConf Conf
 
-var allSessions = map[string]time.Time{}
+// Session - one session
+type Session struct {
+	User    string
+	Host    string
+	Expire  time.Time
+	TimeStr string
+}
+
+var allSessions = make(map[string]Session)
 
 var cookieName = "forauth_session_token"

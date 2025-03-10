@@ -27,10 +27,10 @@ type TargetStruct struct {
 
 // GuiData - web gui data
 type GuiData struct {
-	Config     Conf
-	Themes     []string
-	Version    string
-	Auth       auth.Conf
-	HideLogout bool
-	TargetMap  map[string]TargetStruct
+	Config    Conf
+	Themes    []string
+	Version   string
+	Auth      auth.Conf
+	TargetMap map[string]TargetStruct
+	Sessions  map[string]auth.Session
 }
