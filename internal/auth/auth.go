@@ -25,7 +25,7 @@ func Auth(c *gin.Context, conf *Conf) bool {
 	}
 
 	if exists && exp {
-		log.Println("DEBUG: session for user '" + authConf.User + "' logged in from " + c.Request.RemoteAddr + " expired.")
+		log.Println("INFO: session for user '" + authConf.User + "' logged in from " + c.Request.RemoteAddr + " expired.")
 		delete(allSessions, sessionToken)
 	}
 
