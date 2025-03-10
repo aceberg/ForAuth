@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"log"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -17,11 +18,16 @@ func Auth(c *gin.Context, conf *Conf) bool {
 	sessionToken := getTokenFromCookie(c)
 
 	userSession, exists := allSessions[sessionToken]
+	exp := userSession.Before(time.Now())
 
-	if !exists || userSession.Before(time.Now()) {
-		delete(allSessions, sessionToken)
-		return false
+	if exists && !exp {
+		return true
 	}
 
-	return true
+	if exists && exp {
+		log.Println("DEBUG: session for user '" + authConf.User + "' logged in from " + c.Request.RemoteAddr + " expired.")
+		delete(allSessions, sessionToken)
+	}
+
+	return false
 }
