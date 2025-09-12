@@ -55,7 +55,7 @@ func loginScreen(c *gin.Context, target, name string) {
 
 		msg := "User '" + username + "' logged in from " + c.Request.RemoteAddr + ". Session expires in " + authConf.Expire.String() + ". Target: " + target + " (" + name + ")"
 		log.Println("INFO:", msg)
-		notify.Shout("ForAuth: "+msg, appConfig.Notify)
+		go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
 		auth.StartSession(c)
 
@@ -64,7 +64,7 @@ func loginScreen(c *gin.Context, target, name string) {
 		if username != "" {
 			msg := "Incorrect login attempt by '" + username + "' with password '" + password + "' logged in from " + c.Request.RemoteAddr + ". Target: " + target + " (" + name + ")"
 			log.Println("WARNING:", msg)
-			notify.Shout("ForAuth: "+msg, appConfig.Notify)
+			go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 		}
 
 		guiData.Config = appConfig

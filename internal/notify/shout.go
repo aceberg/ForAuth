@@ -1,7 +1,7 @@
 package notify
 
 import (
-	"github.com/containrrr/shoutrrr"
+	"github.com/nicholas-fedor/shoutrrr"
 	"log"
 )
 

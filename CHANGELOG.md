@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] - 2025-09-12
+### Changed
+- Upgraded to `go-1.25.1`
+- Moved to maintained `Shoutrrr`: [github.com/nicholas-fedor/shoutrrr](https://github.com/nicholas-fedor/shoutrrr)
+
+### Fixed
+- Bug when Shoutrrr notification failed
+
 ## [0.1.4] - 2025-03-11
 ### Added
 - Show current sessions on Config page
