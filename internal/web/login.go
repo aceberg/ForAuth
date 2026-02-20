@@ -65,6 +65,7 @@ func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 		go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
 		log.Println("REQUEST:", c.Request)
+		log.Println("IP:", c.ClientIP())
 
 		auth.StartSession(c, currentAuth)
 
