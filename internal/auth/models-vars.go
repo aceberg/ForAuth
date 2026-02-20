@@ -6,14 +6,12 @@ import (
 
 // Conf - auth config
 type Conf struct {
-	Auth     bool
-	User     string
-	Password string
-	ExpStr   string
-	Expire   time.Duration
+	Auth     bool          `yaml:"enabled"`
+	User     string        `yaml:"username"`
+	Password string        `yaml:"password"`
+	ExpStr   string        `yaml:"expire"`
+	Expire   time.Duration `yaml:"-"`
 }
-
-var authConf Conf
 
 // Session - one session
 type Session struct {

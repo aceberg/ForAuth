@@ -14,20 +14,29 @@ func Auth(c *gin.Context, conf *Conf) bool {
 		return true
 	}
 
-	authConf = *conf
-	sessionToken := getTokenFromCookie(c)
+	user, exists := GetCurrentUser(c)
 
-	userSession, exists := allSessions[sessionToken]
-	exp := userSession.Expire.Before(time.Now())
-
-	if exists && !exp {
+	if exists && (user == conf.User) {
 		return true
 	}
 
-	if exists && exp {
-		log.Println("INFO: session for user '" + authConf.User + "' logged in from " + c.Request.RemoteAddr + " expired.")
+	return false
+}
+
+// GetCurrentUser - get current session user from cookie
+func GetCurrentUser(c *gin.Context) (string, bool) {
+	var userSession Session
+
+	sessionToken := getTokenFromCookie(c)
+	userSession, ok := allSessions[sessionToken]
+	exp := userSession.Expire.Before(time.Now())
+
+	if ok && exp {
+		log.Println("INFO: session for user '" + userSession.User + "' logged in from " + c.Request.RemoteAddr + " expired.")
 		delete(allSessions, sessionToken)
+
+		ok = false
 	}
 
-	return false
+	return userSession.User, ok
 }

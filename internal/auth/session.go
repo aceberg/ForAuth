@@ -12,14 +12,14 @@ import (
 var mu sync.Mutex
 
 // StartSession for new login
-func StartSession(c *gin.Context) {
+func StartSession(c *gin.Context, currentAuth Conf) {
 	var ses Session
 
 	sessionToken := uuid.NewString()
 
-	ses.User = authConf.User
+	ses.User = currentAuth.User
 	ses.Host = c.Request.Host
-	ses.Expire = time.Now().Add(authConf.Expire)
+	ses.Expire = time.Now().Add(currentAuth.Expire)
 	ses.TimeStr = ses.Expire.Format("2006-01-02 15:04:05")
 
 	mu.Lock()

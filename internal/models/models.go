@@ -21,8 +21,9 @@ type Conf struct {
 
 // TargetStruct - for Multi Target
 type TargetStruct struct {
-	Name   string `yaml:"name"`
-	Target string `yaml:"target"`
+	Name   string               `yaml:"name"`
+	Target string               `yaml:"target"`
+	Users  map[string]auth.Conf `yaml:"users"`
 }
 
 // GuiData - web gui data
