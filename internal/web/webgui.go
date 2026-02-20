@@ -40,6 +40,7 @@ func Gui(dirPath, nodePath string) {
 
 	gin.SetMode(gin.ReleaseMode)
 	routerConf := gin.New()
+	routerConf.SetTrustedProxies(nil)
 
 	templ = template.Must(template.New("").ParseFS(templFS, "templates/*"))
 
@@ -72,6 +73,7 @@ func Gui(dirPath, nodePath string) {
 func newRouter(proxy, target, name string) {
 
 	routerProxy := gin.New()
+	routerProxy.SetTrustedProxies(nil)
 	routerProxy.SetHTMLTemplate(templ) // templates
 
 	// Middleware to add variable to context
