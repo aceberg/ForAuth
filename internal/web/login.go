@@ -60,7 +60,7 @@ func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 
 	if ok {
 
-		msg := "User '" + username + "' logged in from " + c.Request.RemoteAddr + ". Session expires in " + authConf.Expire.String() + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")"
+		msg := "User '" + username + "' logged in from " + c.Request.RemoteAddr + ". Session expires in " + currentAuth.Expire.String() + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")"
 		log.Println("INFO:", msg)
 		go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 

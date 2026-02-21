@@ -22,16 +22,6 @@ func logoutHandler(c *gin.Context) {
 	}
 }
 
-func sessionDelHandler(c *gin.Context) {
-
-	authOk := auth.Auth(c, &authConf)
-	if authOk {
-		key := c.Query("key")
-		auth.LogOutByToken(key)
-		c.Redirect(http.StatusFound, "/")
-	}
-}
-
 func configHandler(c *gin.Context) {
 
 	authOk := auth.Auth(c, &authConf)
@@ -112,30 +102,4 @@ func saveConfigAuth(c *gin.Context) {
 	}
 
 	c.Redirect(http.StatusFound, "/")
-}
-
-func addTargetHandler(c *gin.Context) {
-
-	authOk := auth.Auth(c, &authConf)
-	if authOk {
-		name := c.PostForm("name")
-		proxy := c.PostForm("proxy")
-		target := c.PostForm("target")
-
-		targetMap[proxy] = models.TargetStruct{Name: name, Target: target}
-		yaml.Write(appConfig.YamlPath, targetMap)
-	}
-	c.Redirect(http.StatusFound, "/")
-}
-
-func delTargetHandler(c *gin.Context) {
-
-	authOk := auth.Auth(c, &authConf)
-	if authOk {
-		key := c.Query("key")
-
-		delete(targetMap, key)
-		yaml.Write(appConfig.YamlPath, targetMap)
-	}
-	c.Redirect(http.StatusFound, c.Request.Referer())
 }

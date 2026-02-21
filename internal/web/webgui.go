@@ -40,21 +40,24 @@ func Gui(dirPath, nodePath string) {
 
 	gin.SetMode(gin.ReleaseMode)
 	routerConf := gin.New()
-	routerConf.SetTrustedProxies(nil)
 
 	templ = template.Must(template.New("").ParseFS(templFS, "templates/*"))
 
 	routerConf.SetHTMLTemplate(templ)           // templates
 	routerConf.StaticFS("/fs/", http.FS(pubFS)) // public
 
-	routerConf.GET("/", configHandler)               // config.go
-	routerConf.GET("/logout", logoutHandler)         // config.go
-	routerConf.GET("/target/del", delTargetHandler)  // config.go
-	routerConf.GET("/session", sessionDelHandler)    // config.go
-	routerConf.POST("/", configHandler)              // config.go
-	routerConf.POST("/config/", saveConfigHandler)   // config.go
-	routerConf.POST("/config/auth", saveConfigAuth)  // config.go
-	routerConf.POST("/target/add", addTargetHandler) // config.go
+	routerConf.GET("/", configHandler)              // config.go
+	routerConf.GET("/logout", logoutHandler)        // config.go
+	routerConf.POST("/", configHandler)             // config.go
+	routerConf.POST("/config/", saveConfigHandler)  // config.go
+	routerConf.POST("/config/auth", saveConfigAuth) // config.go
+
+	routerConf.GET("/advanced", advancedHandler)     // advanced.go
+	routerConf.GET("/target/del", delTargetHandler)  // advanced.go
+	routerConf.POST("/target/add", addTargetHandler) // advanced.go
+
+	routerConf.GET("/sessions", sessionsHandler)       // sessions.go
+	routerConf.GET("/sessions/del", delSessionHandler) // sessions.go
 
 	if appConfig.Port != "" {
 		proxy := appConfig.Host + ":" + appConfig.Port
@@ -73,7 +76,6 @@ func Gui(dirPath, nodePath string) {
 func newRouter(proxy, target, name string) {
 
 	routerProxy := gin.New()
-	routerProxy.SetTrustedProxies(nil)
 	routerProxy.SetHTMLTemplate(templ) // templates
 
 	// Middleware to add variable to context
