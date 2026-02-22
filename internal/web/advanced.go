@@ -16,8 +16,10 @@ func advancedHandler(c *gin.Context) {
 	if authOk {
 		var guiData models.GuiData
 
+		targetMap = yaml.Read(appConfig.YamlPath)
+
 		guiData.Config = appConfig
-		guiData.TargetMap = yaml.Read(appConfig.YamlPath)
+		guiData.TargetMap = targetMap
 
 		c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "advanced.html", guiData)
@@ -51,6 +53,81 @@ func delTargetHandler(c *gin.Context) {
 		key := c.Query("key")
 
 		delete(targetMap, key)
+		yaml.Write(appConfig.YamlPath, targetMap)
+	}
+	c.Redirect(http.StatusFound, c.Request.Referer())
+}
+
+func addUserHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+
+	target := c.PostForm("target")
+	user := c.PostForm("user")
+	password := c.PostForm("password")
+	expire := c.PostForm("expire")
+
+	if authOk && user != "" && password != "" {
+
+		if expire == "" {
+			expire = "14d"
+		}
+
+		newUser := auth.Conf{Auth: true, User: user, ExpStr: expire}
+		newUser.Password = auth.HashPassword(password)
+
+		proxy := targetMap[target]
+
+		userMap := make(map[string]auth.Conf)
+		if proxy.Users != nil {
+			userMap = proxy.Users
+		}
+		userMap[user] = newUser
+		proxy.Users = userMap
+
+		targetMap[target] = proxy
+
+		yaml.Write(appConfig.YamlPath, targetMap)
+	}
+	c.Redirect(http.StatusFound, c.Request.Referer())
+}
+
+func delUserHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		target := c.Query("target")
+		user := c.Query("user")
+
+		proxy := targetMap[target]
+		userMap := proxy.Users
+
+		delete(userMap, user)
+		proxy.Users = userMap
+		targetMap[target] = proxy
+
+		yaml.Write(appConfig.YamlPath, targetMap)
+	}
+	c.Redirect(http.StatusFound, c.Request.Referer())
+}
+
+func enableUserHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+		target := c.Query("target")
+		user := c.Query("user")
+
+		proxy := targetMap[target]
+		userMap := proxy.Users
+
+		newUser := userMap[user]
+		newUser.Auth = !newUser.Auth
+
+		userMap[user] = newUser
+		proxy.Users = userMap
+		targetMap[target] = proxy
+
 		yaml.Write(appConfig.YamlPath, targetMap)
 	}
 	c.Redirect(http.StatusFound, c.Request.Referer())

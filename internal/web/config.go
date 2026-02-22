@@ -10,7 +10,6 @@ import (
 	"github.com/aceberg/ForAuth/internal/check"
 	"github.com/aceberg/ForAuth/internal/conf"
 	"github.com/aceberg/ForAuth/internal/models"
-	"github.com/aceberg/ForAuth/internal/yaml"
 )
 
 func logoutHandler(c *gin.Context) {
@@ -30,8 +29,6 @@ func configHandler(c *gin.Context) {
 
 		guiData.Config = appConfig
 		guiData.Auth = authConf
-		guiData.TargetMap = yaml.Read(appConfig.YamlPath)
-		guiData.Sessions = auth.GetAllSessions()
 
 		guiData.Themes = []string{"cerulean", "cosmo", "cyborg", "darkly", "emerald", "flatly", "grass", "grayscale", "journal", "litera", "lumen", "lux", "materia", "minty", "morph", "ocean", "pulse", "quartz", "sand", "sandstone", "simplex", "sketchy", "slate", "solar", "spacelab", "superhero", "united", "vapor", "wood", "yeti", "zephyr"}
 

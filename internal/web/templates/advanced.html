@@ -22,7 +22,7 @@
       <div class="card border-primary mb-4">
         <div class="card-header">Multi Target</div>
         <div class="card-body table-responsive">
-          <table class="table table-borderless">
+          <table class="table table-borderless table-hover table-striped">
             <thead>
               <tr>
                 <th>Name</th>
@@ -51,6 +51,79 @@
                   <td><button type="submit" class="btn btn-primary">Add</button></td>
                 </form>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card border-primary mb-4">
+        <div class="card-header">Add User</div>
+        <div class="card-body table-responsive">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th>Target</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Expire</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <form action="/user/add/" method="post">
+                  <td>
+                    <select name="target" class="form-select">
+                    {{ range $key, $value := .TargetMap }}
+                        <option value="{{ $key }}">{{ $value.Name }}</option>
+                    {{ end }}
+                    </select>
+                  </td>
+                  <td><input name="user" type="text" class="form-control" placeholder="Username" autocomplete="off"></td>
+                  <td><input name="password" type="password" class="form-control" placeholder="Password" autocomplete="new-password"></td>
+                  <td><input name="expire" type="text" class="form-control" placeholder="14d"></td>
+                  <td><button type="submit" class="btn btn-primary">Add</button></td>
+                </form>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card border-primary mb-4">
+        <div class="card-header">Users</div>
+        <div class="card-body table-responsive">
+          <table class="table table-borderless table-hover table-striped">
+            <thead>
+              <tr>
+                <th>Enabled</th>
+                <th>Target</th>
+                <th>Username</th>
+                <th>Expire</th>
+                <th>Del</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ range $key, $value := .TargetMap }}
+              {{ range $name, $user := $value.Users }}
+              <tr>
+                <td>
+                  <div class="form-check form-switch" onclick="window.location.href='/user/enable/?target={{ $key }}&user={{ $name }}'">
+                    {{ if $user.Auth }}
+                    <input class="form-check-input" type="checkbox" checked>
+                    {{ else }}
+                    <input class="form-check-input" type="checkbox">
+                    {{ end }}
+                  </div>
+                </td>
+                <td>{{ $value.Name }}</td>
+                <td>{{ $name }}</td>
+                <td>{{ $user.ExpStr }}</td>
+                <td><a href="/user/del/?target={{ $key }}&user={{ $name }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                </svg></a></td>
+              </tr>
+              {{ end }}
+              {{ end }}
             </tbody>
           </table>
         </div>

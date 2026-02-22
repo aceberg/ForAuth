@@ -25,9 +25,9 @@ func loginHandler(c *gin.Context) {
 		authOk = auth.Auth(c, &authConf)
 	} else {
 		username, sesOk := auth.GetCurrentUser(c)
-		_, ok := targetStruct.Users[username]
+		targetUser, ok := targetStruct.Users[username]
 
-		if sesOk && (ok || username == authConf.User) {
+		if sesOk && ((ok && targetUser.Auth) || username == authConf.User) {
 			authOk = true
 		}
 	}
@@ -91,7 +91,7 @@ func checkUsername(targetStruct models.TargetStruct, username, password string) 
 	}
 
 	targetAuth, ok := targetStruct.Users[username]
-	if ok && (username == targetAuth.User &&
+	if ok && (username == targetAuth.User && targetAuth.Auth &&
 		auth.MatchPasswords(targetAuth.Password, password)) {
 
 		targetAuth.Expire = auth.ToTime(targetAuth.ExpStr)

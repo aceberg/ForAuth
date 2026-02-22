@@ -52,9 +52,12 @@ func Gui(dirPath, nodePath string) {
 	routerConf.POST("/config/", saveConfigHandler)  // config.go
 	routerConf.POST("/config/auth", saveConfigAuth) // config.go
 
-	routerConf.GET("/advanced", advancedHandler)     // advanced.go
-	routerConf.GET("/target/del", delTargetHandler)  // advanced.go
-	routerConf.POST("/target/add", addTargetHandler) // advanced.go
+	routerConf.GET("/advanced", advancedHandler)      // advanced.go
+	routerConf.GET("/target/del", delTargetHandler)   // advanced.go
+	routerConf.GET("/user/del", delUserHandler)       // advanced.go
+	routerConf.GET("/user/enable", enableUserHandler) // advanced.go
+	routerConf.POST("/target/add", addTargetHandler)  // advanced.go
+	routerConf.POST("/user/add", addUserHandler)      // advanced.go
 
 	routerConf.GET("/sessions", sessionsHandler)       // sessions.go
 	routerConf.GET("/sessions/del", delSessionHandler) // sessions.go
