@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Multiuser for targets
 - Redirect to Referer() instead of "/"
+- Optional client IP info (uses https://ipinfo.io)
+- Test notification
 
 ## [0.1.5] - 2025-09-12
 ### Changed

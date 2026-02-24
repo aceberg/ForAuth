@@ -12,7 +12,7 @@ import (
 var mu sync.Mutex
 
 // StartSession for new login
-func StartSession(c *gin.Context, currentAuth Conf) {
+func StartSession(c *gin.Context, currentAuth Conf, clientIP string) {
 	var ses Session
 
 	sessionToken := uuid.NewString()
@@ -21,6 +21,11 @@ func StartSession(c *gin.Context, currentAuth Conf) {
 	ses.Host = c.Request.Host
 	ses.Expire = time.Now().Add(currentAuth.Expire)
 	ses.TimeStr = ses.Expire.Format("2006-01-02 15:04:05")
+
+	if clientIP == "" {
+		clientIP = "Enable IP Info to see"
+	}
+	ses.ClientIP = clientIP
 
 	mu.Lock()
 	allSessions[sessionToken] = ses

@@ -15,7 +15,7 @@ func delSessionHandler(c *gin.Context) {
 	if authOk {
 		key := c.Query("key")
 		auth.LogOutByToken(key)
-		c.Redirect(http.StatusFound, "/sessions")
+		c.Redirect(http.StatusFound, c.Request.Referer())
 	}
 }
 

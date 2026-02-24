@@ -15,10 +15,11 @@ type Conf struct {
 
 // Session - one session
 type Session struct {
-	User    string
-	Host    string
-	Expire  time.Time
-	TimeStr string
+	User     string
+	Host     string
+	Expire   time.Time
+	TimeStr  string
+	ClientIP string
 }
 
 var allSessions = make(map[string]Session)

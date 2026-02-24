@@ -10,6 +10,7 @@ import (
 	"github.com/aceberg/ForAuth/internal/check"
 	"github.com/aceberg/ForAuth/internal/conf"
 	"github.com/aceberg/ForAuth/internal/models"
+	"github.com/aceberg/ForAuth/internal/notify"
 )
 
 func logoutHandler(c *gin.Context) {
@@ -61,11 +62,18 @@ func saveConfigHandler(c *gin.Context) {
 		appConfig.NodePath = c.PostForm("nodepath")
 		appConfig.Notify = c.PostForm("notify")
 
+		ipInfo := c.PostForm("ipinfo")
+		if ipInfo == "on" {
+			appConfig.IPInfo = true
+		} else {
+			appConfig.IPInfo = false
+		}
+
 		conf.Write(appConfig, authConf)
 
 		log.Println("INFO: writing new config to", appConfig.ConfPath)
 	}
-	c.Redirect(http.StatusFound, "/")
+	c.Redirect(http.StatusFound, c.Request.Referer())
 }
 
 func saveConfigAuth(c *gin.Context) {
@@ -98,5 +106,16 @@ func saveConfigAuth(c *gin.Context) {
 		conf.Write(appConfig, authConf)
 	}
 
-	c.Redirect(http.StatusFound, "/")
+	c.Redirect(http.StatusFound, c.Request.Referer())
+}
+
+func notifyHandler(c *gin.Context) {
+
+	authOk := auth.Auth(c, &authConf)
+	if authOk {
+
+		go notify.Shout("ForAuth: Test Notification", appConfig.Notify)
+
+		c.Redirect(http.StatusFound, c.Request.Referer())
+	}
 }

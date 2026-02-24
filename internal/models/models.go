@@ -17,6 +17,7 @@ type Conf struct {
 	NodePath string
 	Target   string
 	Notify   string
+	IPInfo   bool
 }
 
 // TargetStruct - for Multi Target
@@ -24,6 +25,15 @@ type TargetStruct struct {
 	Name   string               `yaml:"name"`
 	Target string               `yaml:"target"`
 	Users  map[string]auth.Conf `yaml:"users"`
+}
+
+// ClienInfo - IP and other data
+type ClienInfo struct {
+	IP       string
+	Hostname string
+	Timezone string
+	City     string
+	Country  string
 }
 
 // GuiData - web gui data

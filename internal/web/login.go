@@ -52,27 +52,37 @@ func reverseProxy(c *gin.Context, target string) {
 
 func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 	var guiData models.GuiData
+	var client models.ClienInfo
+	var clientStr string
 
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+
+	client.IP = c.PostForm("client_ip")
+	client.Hostname = c.PostForm("client_hn")
+	client.Timezone = c.PostForm("client_tz")
+	client.City = c.PostForm("client_ci")
+	client.Country = c.PostForm("client_co")
+
+	if client.IP != "" {
+		clientStr = "\nUser IP Info: \nIP: " + client.IP +
+			"\nHostname: " + client.Hostname + "\nTimezone: " + client.Timezone + "\nCity: " + client.City + "\nCountry: " + client.Country
+	}
 
 	currentAuth, ok := checkUsername(targetStruct, username, password)
 
 	if ok {
 
-		msg := "User '" + username + "' logged in from " + c.Request.RemoteAddr + ". Session expires in " + currentAuth.Expire.String() + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")"
+		msg := "User '" + username + "' logged in from " + c.Request.Host + ". Session expires in " + currentAuth.Expire.String() + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")" + clientStr
 		log.Println("INFO:", msg)
 		go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
-		log.Println("REQUEST:", c.Request)
-		log.Println("IP:", c.ClientIP())
-
-		auth.StartSession(c, currentAuth)
+		auth.StartSession(c, currentAuth, client.IP)
 
 		c.Redirect(http.StatusFound, c.Request.Referer())
 	} else {
 		if username != "" {
-			msg := "Incorrect login attempt by '" + username + "' with password '" + password + "' logged in from " + c.Request.RemoteAddr + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")"
+			msg := "Incorrect login attempt by '" + username + "' with password '" + password + "' logged in from " + c.Request.Host + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")" + clientStr
 			log.Println("WARNING:", msg)
 			go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 		}

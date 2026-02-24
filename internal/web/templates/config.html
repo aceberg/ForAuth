@@ -62,6 +62,18 @@
                 <td><input name="nodepath" type="text" class="form-control" value="{{ .Config.NodePath }}"></td>
               </tr>
               <tr>
+                <td>Use IP Info</td>
+                <td>
+                  <div class="form-check form-switch">
+                    {{ if .Config.IPInfo }}
+                    <input class="form-check-input" type="checkbox" name="ipinfo" checked>
+                    {{ else }}
+                    <input class="form-check-input" type="checkbox" name="ipinfo">
+                    {{ end }}
+                  </div>
+                </td>
+              </tr>
+              <tr>
                 <td>Notify URL</td>
                 <td>
                   <textarea name="notify" class="form-control" style="width: 100%;" rows="3" wrap="soft">{{ .Config.Notify }}</textarea>
@@ -69,9 +81,9 @@
               </tr>
               <tr>
                 <td><button type="submit" class="btn btn-primary">Save</button></td>
-                <td></td>
-              </tr>
             </form>
+                <td><button type="button" class="btn btn-info" onclick="window.location.href='/config/notify'">Test notification</button></td>
+              </tr>
             </table>
           </div>
       </div>

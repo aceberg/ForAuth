@@ -7,11 +7,37 @@
                 <form action="/" method="post">
                     <input name="username" type="text" placeholder="Login" class="form-control p-2 m-2">
                     <input name="password" type="password" placeholder="Password" class="form-control p-2 m-2">
+                    <input type="hidden" name="client_ip" id="client_ip">
+                    <input type="hidden" name="client_hn" id="client_hn">
+                    <input type="hidden" name="client_tz" id="client_tz">
+                    <input type="hidden" name="client_ci" id="client_ci">
+                    <input type="hidden" name="client_co" id="client_co">
                     <button type="submit" class="btn btn-primary p-2 m-2">Login</button>
                 </form>
             </div>
         </div>
     </div>
+
+{{ if .Config.IPInfo }}
+<script>
+fetch("https://ipinfo.io/json")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("client_ip").value = data.ip;
+    document.getElementById("client_hn").value = data.hostname;
+    document.getElementById("client_tz").value = data.timezone;
+    document.getElementById("client_ci").value = data.city;
+    document.getElementById("client_co").value = data.country;
+  })
+  .catch(() => {
+    document.getElementById("client_ip").value = "unknown";
+    document.getElementById("client_hn").value = "unknown";
+    document.getElementById("client_tz").value = "unknown";
+    document.getElementById("client_ci").value = "unknown";
+    document.getElementById("client_co").value = "unknown";
+  });
+</script>
+{{ end }}
 
 {{ template "footer.html" }}
 {{ end }}
