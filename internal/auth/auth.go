@@ -33,7 +33,11 @@ func GetCurrentUser(c *gin.Context) (string, bool) {
 
 	if ok && exp {
 		log.Println("INFO: session for user '" + userSession.User + "' logged in from " + c.Request.RemoteAddr + " expired.")
+
+		mu.Lock()
 		delete(allSessions, sessionToken)
+		SaveSessions()
+		mu.Unlock()
 
 		ok = false
 	}

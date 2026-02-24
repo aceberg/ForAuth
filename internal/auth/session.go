@@ -22,6 +22,7 @@ func StartSession(c *gin.Context, currentAuth Conf, clientIP, target string) {
 	ses.Expire = time.Now().Add(currentAuth.Expire)
 	ses.TimeStr = ses.Expire.Format("2006-01-02 15:04:05")
 	ses.Target = target
+	ses.Started = time.Now().Format("2006-01-02 15:04:05")
 
 	if clientIP == "" {
 		clientIP = "Enable IP Info to see"
@@ -30,6 +31,7 @@ func StartSession(c *gin.Context, currentAuth Conf, clientIP, target string) {
 
 	mu.Lock()
 	allSessions[sessionToken] = ses
+	SaveSessions()
 	mu.Unlock()
 
 	setTokenCookie(c, sessionToken)

@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/aceberg/ForAuth/internal/auth"
 	"github.com/aceberg/ForAuth/internal/check"
 	"github.com/aceberg/ForAuth/internal/conf"
 	"github.com/aceberg/ForAuth/internal/yaml"
@@ -19,6 +20,10 @@ func Gui(dirPath, nodePath string) {
 
 	confPath := dirPath + "/config.yaml"
 	check.Path(confPath)
+
+	auth.SessionsFilePath = dirPath + "/sessions.json"
+	check.Path(auth.SessionsFilePath)
+	auth.RestoreSessions()
 
 	appConfig, authConf = conf.Get(confPath)
 	appConfig.DirPath = dirPath

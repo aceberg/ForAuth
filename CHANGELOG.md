@@ -1,12 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.2.1] - 2026-02-
-### Changed
+## [0.2.1] - 2026-02-24
+### Added
 - Multiuser for targets
-- Redirect to Referer() instead of "/"
+- Sessions stored in file to restore after app reloads
 - Optional client IP info (uses https://ipinfo.io)
 - Test notification
+
+### Fixed
+- Redirect to Referer() instead of "/"
 
 ## [0.1.5] - 2025-09-12
 ### Changed

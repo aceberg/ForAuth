@@ -21,8 +21,12 @@ type Session struct {
 	TimeStr  string
 	ClientIP string
 	Target   string
+	Started  string
 }
 
 var allSessions = make(map[string]Session)
 
 var cookieName = "forauth_session_token"
+
+// SessionsFilePath - path to sessions.json file
+var SessionsFilePath string
