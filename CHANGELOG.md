@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 - Multiuser for targets
 - Sessions stored in file to restore after app reloads
 - Optional client IP info (uses https://ipinfo.io)
-- Test notification
+- Test notifications
+- Second notification option
 
 ### Fixed
 - Redirect to Referer() instead of "/"

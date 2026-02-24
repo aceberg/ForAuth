@@ -17,6 +17,7 @@ type Conf struct {
 	NodePath string
 	Target   string
 	Notify   string
+	Notify2  string
 	IPInfo   bool
 }
 

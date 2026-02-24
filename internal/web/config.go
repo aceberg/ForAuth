@@ -61,6 +61,7 @@ func saveConfigHandler(c *gin.Context) {
 		appConfig.Color = c.PostForm("color")
 		appConfig.NodePath = c.PostForm("nodepath")
 		appConfig.Notify = c.PostForm("notify")
+		appConfig.Notify2 = c.PostForm("notify2")
 
 		ipInfo := c.PostForm("ipinfo")
 		if ipInfo == "on" {
@@ -114,7 +115,8 @@ func notifyHandler(c *gin.Context) {
 	authOk := auth.Auth(c, &authConf)
 	if authOk {
 
-		go notify.Shout("ForAuth: Test Notification", appConfig.Notify)
+		go notify.Shout("Test Notification", appConfig.Notify)
+		go notify.Shout("Test Notification", appConfig.Notify2)
 
 		c.Redirect(http.StatusFound, c.Request.Referer())
 	}

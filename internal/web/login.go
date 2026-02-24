@@ -75,7 +75,8 @@ func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 
 		msg := "User '" + username + "' logged in from " + c.Request.Host + ". Session expires in " + currentAuth.Expire.String() + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")" + clientStr
 		log.Println("INFO:", msg)
-		go notify.Shout("ForAuth: "+msg, appConfig.Notify)
+		go notify.Shout(msg, appConfig.Notify)
+		go notify.Shout(msg, appConfig.Notify2)
 
 		auth.StartSession(c, currentAuth, client.IP, targetStruct.Name)
 
@@ -84,12 +85,12 @@ func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 		if username != "" {
 			msg := "Incorrect login attempt by '" + username + "' with password '" + password + "' logged in from " + c.Request.Host + ". Target: " + targetStruct.Target + " (" + targetStruct.Name + ")" + clientStr
 			log.Println("WARNING:", msg)
-			go notify.Shout("ForAuth: "+msg, appConfig.Notify)
+			go notify.Shout(msg, appConfig.Notify)
+			go notify.Shout(msg, appConfig.Notify2)
 		}
 
 		guiData.Config = appConfig
 
-		// c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "login.html", guiData)
 	}
 }

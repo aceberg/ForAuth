@@ -19,6 +19,7 @@ func Get(path string) (config models.Conf, authConf auth.Conf) {
 	viper.SetDefault("FA_COLOR", "dark")
 	viper.SetDefault("FA_NODEPATH", "")
 	viper.SetDefault("FA_NOTIFY", "")
+	viper.SetDefault("FA_NOTIFY2", "")
 	viper.SetDefault("FA_IPINFO", false)
 
 	viper.SetDefault("FA_AUTH_USER", "")
@@ -40,6 +41,7 @@ func Get(path string) (config models.Conf, authConf auth.Conf) {
 	config.Color, _ = viper.Get("FA_COLOR").(string)
 	config.NodePath, _ = viper.Get("FA_NODEPATH").(string)
 	config.Notify, _ = viper.Get("FA_NOTIFY").(string)
+	config.Notify2, _ = viper.Get("FA_NOTIFY2").(string)
 	config.IPInfo = viper.GetBool("FA_IPINFO")
 
 	authConf.Auth = viper.GetBool("FA_AUTH")
@@ -66,6 +68,7 @@ func Write(config models.Conf, authConf auth.Conf) {
 	viper.Set("fa_color", config.Color)
 	viper.Set("fa_nodepath", config.NodePath)
 	viper.Set("fa_notify", config.Notify)
+	viper.Set("fa_notify2", config.Notify2)
 	viper.Set("fa_ipinfo", config.IPInfo)
 
 	viper.Set("fa_auth", authConf.Auth)
