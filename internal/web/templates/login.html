@@ -1,5 +1,17 @@
 {{ define "login.html" }}
-
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="{{ .Config.Color }}">
+<head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ if eq .Config.NodePath "" }}
+    <!-- Bootstrap and theme -->
+    <link href="https://cdn.jsdelivr.net/npm/aceberg-bootswatch-fork@v5.3.3-2/dist/{{ .Config.Theme }}/bootstrap.min.css" rel="stylesheet">
+    {{ else }} <!-- Local node_modules -->
+    <link href="{{ .Config.NodePath }}/node_modules/bootswatch/dist/{{ .Config.Theme }}/bootstrap.min.css" rel="stylesheet">
+    {{ end }}
+</head>
 <body>
     <div class="container-lg vh-100">
         <div class="row text-center h-100 justify-content-center align-items-center">

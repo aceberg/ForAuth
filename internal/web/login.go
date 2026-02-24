@@ -77,7 +77,7 @@ func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 		log.Println("INFO:", msg)
 		go notify.Shout("ForAuth: "+msg, appConfig.Notify)
 
-		auth.StartSession(c, currentAuth, client.IP)
+		auth.StartSession(c, currentAuth, client.IP, targetStruct.Name)
 
 		c.Redirect(http.StatusFound, c.Request.Referer())
 	} else {
@@ -89,7 +89,7 @@ func loginScreen(c *gin.Context, targetStruct models.TargetStruct) {
 
 		guiData.Config = appConfig
 
-		c.HTML(http.StatusOK, "header.html", guiData)
+		// c.HTML(http.StatusOK, "header.html", guiData)
 		c.HTML(http.StatusOK, "login.html", guiData)
 	}
 }

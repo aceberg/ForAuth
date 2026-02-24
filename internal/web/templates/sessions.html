@@ -1,21 +1,6 @@
 {{ define "sessions.html" }}
 
 <body>
-  <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-    <div class="container-lg">
-      <ul class="nav navbar-nav me-auto mb-2 mb-sm-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/">Config</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/advanced">Advanced</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/sessions">Sessions</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div class="container-lg mt-4">
     <div class="row">
     <div class="col-md">
@@ -26,6 +11,7 @@
             <thead>
               <tr>
                 <th>Username</th>
+                <th>Target</th>
                 <th>Host</th>
                 <th>IP on Login</th>
                 <th>Expires</th>
@@ -36,11 +22,12 @@
               {{ range $key, $value := .Sessions }}
               <tr>
                 <td>{{ $value.User }}</td>
+                <td>{{ $value.Target }}</td>
                 <td>
                   <a href="http://{{ $value.Host }}" target="_blank">{{ $value.Host }}</a>
                 </td>
                 <td>{{ $value.ClientIP }}
-                  {{ if $.Config.IPInfo }}
+                  {{ if ne $value.ClientIP "Enable IP Info to see" }}
                     <a href="https://ipinfo.io/{{ $value.ClientIP }}" target="_blank">(ipinfo)</a>
                   {{ end }}
                 </td>

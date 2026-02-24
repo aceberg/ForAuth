@@ -20,6 +20,7 @@ type Session struct {
 	Expire   time.Time
 	TimeStr  string
 	ClientIP string
+	Target   string
 }
 
 var allSessions = make(map[string]Session)
