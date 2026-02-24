@@ -36,10 +36,12 @@
               {{ range $key, $value := .Sessions }}
               <tr>
                 <td>{{ $value.User }}</td>
-                <td>{{ $value.Host }}</td>
+                <td>
+                  <a href="http://{{ $value.Host }}" target="_blank">{{ $value.Host }}</a>
+                </td>
                 <td>{{ $value.ClientIP }}
                   {{ if $.Config.IPInfo }}
-                    (<a href="https://ipinfo.io/{{ $value.ClientIP }}" target="_blank">ipinfo</a>)
+                    <a href="https://ipinfo.io/{{ $value.ClientIP }}" target="_blank">(ipinfo)</a>
                   {{ end }}
                 </td>
                 <td>{{ $value.TimeStr }}</td>
