@@ -6,13 +6,13 @@
     <img src="https://raw.githubusercontent.com/aceberg/forauth/main/assets/logo.png" width="35" />
 </a>ForAuth</h1>
 
-ForAuth (Forward Auth) - simple auth app (session-cookie) with notifications on login and [multiple targets](https://github.com/aceberg/forauth#multiple-targets) option
+ForAuth (Forward Auth) - simple auth app (session-cookie) with notifications on login and [multiple targets and users](https://github.com/aceberg/forauth#multiple-targets-and-users) option
 
 - [Security](https://github.com/aceberg/forauth#security)
 - [Quick start](https://github.com/aceberg/forauth#quick-start)
 - [Config](https://github.com/aceberg/forauth#config)
 - [Options](https://github.com/aceberg/forauth#options)
-- [Multiple Targets](https://github.com/aceberg/forauth#multiple-targets)
+- [Multiple Targets and Users](https://github.com/aceberg/forauth#multiple-targets-and-users)
 - [Local network only](https://github.com/aceberg/forauth#local-network-only)
 - [CURL](https://github.com/aceberg/forauth#curl)
 - [Thanks](https://github.com/aceberg/forauth#thanks)
@@ -49,7 +49,7 @@ Configuration can be done through config file, GUI or environment variables. Var
 | --------  | ----------- | ------- |
 | FA_AUTH | Enable Session-Cookie authentication | false |
 | FA_AUTH_EXPIRE | Session expiration time. A number and suffix: **m, h, d** or **M**. | 7d |
-| FA_AUTH_USER | Username |  |
+| FA_AUTH_USER | Main user username |  |
 | FA_AUTH_PASSWORD | Encrypted password (bcrypt). [How to encrypt password with bcrypt?](docs/BCRYPT.md) |  |
 
 | Variable  | Description | Default |
@@ -62,6 +62,8 @@ Configuration can be done through config file, GUI or environment variables. Var
 | FA_COLOR | Background color: light or dark | dark |
 | FA_NODEPATH   | Path to local JS and Themes ([node-bootstrap](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap)) |  |
 | FA_NOTIFY   | Shoutrrr URL. ForAuth uses [Shoutrrr](https://github.com/containrrr/shoutrrr) to send notifications. It is already integrated, just needs a correct URL. Examples for Discord, Email, Gotify, Matrix, Ntfy, Pushover, Slack, Telegram, Generic Webhook and etc are [here](https://containrrr.dev/shoutrrr/v0.8/services/gotify/) |  |
+| FA_NOTIFY2 | Second Shoutrrr URL. The app will send notifications to both, if they are not empty | |
+| FA_IPINFO | Get client IP info (from https://ipinfo.io) on login | false |
 | TZ | Set your timezone for correct time |  |
 
 ## Options
@@ -71,8 +73,8 @@ Configuration can be done through config file, GUI or environment variables. Var
 | -d | Path to config dir | /data/ForAuth | 
 | -n | Path to local JS and Themes ([node-bootstrap](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap)) |  | 
 
-## Multiple Targets
-Multiple Targets can be gonfigured from `Config` page or in `targets.yaml` file inside the config dir.
+## Multiple Targets and Users
+Multiple Targets and Users for each target can be configured from `Advanced` page or in `targets.yaml` file inside the config dir. Main user (`FA_AUTH_USER`) has access to all targets and config.
 
 <details>
   <summary>Example:</summary>
@@ -81,9 +83,22 @@ Multiple Targets can be gonfigured from `Config` page or in `targets.yaml` file 
 0.0.0.0:8854:               # where proxy will listen
     name: DiaryMD           # name
     target: 127.0.0.1:8754  # where an app listens
+    users:                  # users of this target
+        user1:              # username
+            enabled: true   # must be true for user to login
+            username: user1 # username (same as above)
+            password: $2a$10$bPH6208LpuJFos3x1VhFA.PxzygaAhT056uPxspJxwccgP4n.AnEe
+            expire: 14d     # session expiration time
+        user3:
+            enabled: true
+            username: user3
+            password: $2a$10$eZp3I0A9ojT32gTXvPscHec9e7cHHYtb6M6phl2mUdHXyhFosLW.C
+            expire: 1d
 0.0.0.0:8855:
     name: AnyAppStart
     target: 127.0.0.1:8755
+    # users:                  # users section is optional
+                              # without it only Main user can login
 ```
 
 </details>
