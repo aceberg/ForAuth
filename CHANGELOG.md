@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.2.1] - 2026-02-24
+## [0.2.1] - 2026-03-04
 ### Added
 - Multiuser for targets
 - Sessions stored in file to restore after app reloads

@@ -61,7 +61,7 @@ Configuration can be done through config file, GUI or environment variables. Var
 | FA_THEME | Any theme name from https://bootswatch.com in lowcase or [additional](https://github.com/aceberg/aceberg-bootswatch-fork) (emerald, grass, grayscale, ocean, sand, wood)| united |
 | FA_COLOR | Background color: light or dark | dark |
 | FA_NODEPATH   | Path to local JS and Themes ([node-bootstrap](https://github.com/aceberg/my-dockerfiles/tree/main/node-bootstrap)) |  |
-| FA_NOTIFY   | Shoutrrr URL. ForAuth uses [Shoutrrr](https://github.com/containrrr/shoutrrr) to send notifications. It is already integrated, just needs a correct URL. Examples for Discord, Email, Gotify, Matrix, Ntfy, Pushover, Slack, Telegram, Generic Webhook and etc are [here](https://containrrr.dev/shoutrrr/v0.8/services/gotify/) |  |
+| FA_NOTIFY   | Shoutrrr URL. ForAuth uses [Shoutrrr](https://github.com/nicholas-fedor/shoutrrr) to send notifications. It is already integrated, just needs a correct URL. Examples for Discord, Email, Gotify, Matrix, Ntfy, Pushover, Slack, Telegram, Generic Webhook and etc are [here](https://nicholas-fedor.github.io/shoutrrr/) |  |
 | FA_NOTIFY2 | Second Shoutrrr URL. The app will send notifications to both, if they are not empty | |
 | FA_IPINFO | Get client IP info (from https://ipinfo.io) on login | false |
 | TZ | Set your timezone for correct time |  |
