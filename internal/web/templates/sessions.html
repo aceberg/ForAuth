@@ -7,7 +7,7 @@
       <div class="card border-primary mb-4">
         <div class="card-header">Current Sessions</div>
         <div class="card-body table-responsive">
-          <table class="table table-borderless table-hover table-striped">
+          <table id="sessionsTable" class="table table-borderless table-hover table-striped">
             <thead>
               <tr>
                 <th>Username</th>
@@ -47,6 +47,32 @@
     </div>
   </div>
         
+
+<style>
+th { cursor: pointer; }
+th.asc::after { content: " ▲"; }
+th.desc::after { content: " ▼"; }
+</style>
+
+<script>
+const table=document.getElementById("sessionsTable");
+[...table.querySelectorAll("th")].forEach((th,i)=>{
+  if(i===6) return; // skip delete column
+  th.onclick=()=>{
+    const tbody=table.tBodies[0];
+    const rows=[...tbody.rows];
+    const asc=!th.classList.contains("asc");
+    table.querySelectorAll("th").forEach(h=>h.classList.remove("asc","desc"));
+    th.classList.add(asc?"asc":"desc");
+    rows.sort((a,b)=>{
+      let A=a.cells[i].dataset.sort||a.cells[i].innerText;
+      let B=b.cells[i].dataset.sort||b.cells[i].innerText;
+      return asc?A.localeCompare(B,undefined,{numeric:true}):B.localeCompare(A,undefined,{numeric:true});
+    });
+    rows.forEach(r=>tbody.appendChild(r));
+  };
+});
+</script>
 
 {{ template "footer.html" }}
 {{ end }}
