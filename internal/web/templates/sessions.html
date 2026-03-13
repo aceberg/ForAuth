@@ -10,12 +10,13 @@
           <table id="sessionsTable" class="table table-borderless table-hover table-striped">
             <thead>
               <tr>
-                <th>Username</th>
-                <th>Target</th>
-                <th>Host</th>
-                <th>IP on Login</th>
-                <th>Started</th>
-                <th>Expires</th>
+                <th title="Click to sort">Username</th>
+                <th title="Click to sort">Target</th>
+                <th title="Click to sort">Host</th>
+                <th title="Click to sort">IP on Login</th>
+                <th title="Click to sort">Started</th>
+                <th title="Click to sort">Expires</th>
+                <th title="Click to sort">Last Seen</th>
                 <th>Del</th>
               </tr>
             </thead>
@@ -27,13 +28,29 @@
                 <td>
                   <a href="http://{{ $value.Host }}" target="_blank">{{ $value.Host }}</a>
                 </td>
-                <td>{{ $value.ClientIP }}
+                <td>{{ $value.ClientIP }}<br>
                   {{ if ne $value.ClientIP "Enable IP Info to see" }}
                     <a href="https://ipinfo.io/{{ $value.ClientIP }}" target="_blank">(ipinfo)</a>
                   {{ end }}
                 </td>
-                <td>{{ $value.Started }}</td>
-                <td>{{ $value.TimeStr }}</td>
+                <td>
+                  {{ if ne $value.Started "" }}
+                  {{ slice $value.Started 0 10 }}<br>
+                  <small class="text-muted">{{ slice $value.Started 11 16 }}</small>
+                  {{ end }}
+                </td>
+                <td>
+                  {{ if ne $value.TimeStr "" }}
+                  {{ slice $value.TimeStr 0 10 }}<br>
+                  <small class="text-muted">{{ slice $value.TimeStr 11 16 }}</small>
+                  {{ end }}
+                </td>
+                <td>
+                  {{ if ne $value.LastSeen "" }}
+                  {{ slice $value.LastSeen 0 10 }}<br>
+                  <small class="text-muted">{{ slice $value.LastSeen 11 16 }}</small>
+                  {{ end }}
+                </td>
                 <td><a href="/sessions/del/?key={{ $key }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
                   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
@@ -49,15 +66,23 @@
         
 
 <style>
-th { cursor: pointer; }
-th.asc::after { content: " ▲"; }
-th.desc::after { content: " ▼"; }
+th {
+  cursor: pointer;
+}
+
+th::after {
+  content: " ↕";
+  opacity: 0.3;
+}
+
+th.asc::after { content: " ▲"; opacity:1; }
+th.desc::after { content: " ▼"; opacity:1; }
 </style>
 
 <script>
 const table=document.getElementById("sessionsTable");
 [...table.querySelectorAll("th")].forEach((th,i)=>{
-  if(i===6) return; // skip delete column
+  if(i===7) return; // skip delete column
   th.onclick=()=>{
     const tbody=table.tBodies[0];
     const rows=[...tbody.rows];

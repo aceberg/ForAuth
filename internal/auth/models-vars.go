@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"sync"
 	"time"
 )
 
@@ -15,14 +16,17 @@ type Conf struct {
 
 // Session - one session
 type Session struct {
-	User     string
-	Host     string
-	Expire   time.Time
-	TimeStr  string
-	ClientIP string
-	Target   string
-	Started  string
+	User     string    `json:"User"`
+	Host     string    `json:"Host"`
+	Expire   time.Time `json:"Expire"`
+	TimeStr  string    `json:"TimeStr"`
+	ClientIP string    `json:"ClientIP"`
+	Target   string    `json:"Target"`
+	Started  string    `json:"Started"`
+	LastSeen string    `json:"-"`
 }
+
+var mu sync.RWMutex
 
 var allSessions = make(map[string]Session)
 
@@ -30,3 +34,5 @@ var cookieName = "forauth_session_token"
 
 // SessionsFilePath - path to sessions.json file
 var SessionsFilePath string
+
+var sessionDirty bool

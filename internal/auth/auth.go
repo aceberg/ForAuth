@@ -28,7 +28,9 @@ func GetCurrentUser(c *gin.Context) (string, bool) {
 	var userSession Session
 
 	sessionToken := getTokenFromCookie(c)
+	mu.RLock()
 	userSession, ok := allSessions[sessionToken]
+	mu.RUnlock()
 	exp := userSession.Expire.Before(time.Now())
 
 	if ok && exp {
@@ -36,10 +38,25 @@ func GetCurrentUser(c *gin.Context) (string, bool) {
 
 		mu.Lock()
 		delete(allSessions, sessionToken)
-		SaveSessions()
 		mu.Unlock()
 
+		sessionDirty = true
+
 		ok = false
+	}
+
+	if ok && !exp {
+		now := time.Now().Format("2006-01-02 15:04")
+
+		if now != userSession.LastSeen {
+			userSession.LastSeen = now
+
+			// log.Println("NOW", now)
+
+			mu.Lock()
+			allSessions[sessionToken] = userSession
+			mu.Unlock()
+		}
 	}
 
 	return userSession.User, ok
