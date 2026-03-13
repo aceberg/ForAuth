@@ -41,6 +41,8 @@ func SessionWriter() {
 
 			SaveSessions()
 			sessionDirty = false
+
+			// log.Println("Writing to sessions.json")
 		}
 	}
 }

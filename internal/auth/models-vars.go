@@ -23,7 +23,7 @@ type Session struct {
 	ClientIP string    `json:"ClientIP"`
 	Target   string    `json:"Target"`
 	Started  string    `json:"Started"`
-	LastSeen string    `json:"-"`
+	LastSeen string    `json:"LastSeen"`
 }
 
 var mu sync.RWMutex

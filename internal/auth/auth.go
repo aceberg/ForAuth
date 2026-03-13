@@ -56,6 +56,8 @@ func GetCurrentUser(c *gin.Context) (string, bool) {
 			mu.Lock()
 			allSessions[sessionToken] = userSession
 			mu.Unlock()
+
+			sessionDirty = true
 		}
 	}
 
