@@ -14,7 +14,7 @@ func Auth(c *gin.Context, conf *Conf) bool {
 		return true
 	}
 
-	user, exists := GetCurrentUser(c)
+	user, _, exists := GetCurrentUser(c)
 
 	if exists && (user == conf.User) {
 		return true
@@ -24,7 +24,7 @@ func Auth(c *gin.Context, conf *Conf) bool {
 }
 
 // GetCurrentUser - get current session user from cookie
-func GetCurrentUser(c *gin.Context) (string, bool) {
+func GetCurrentUser(c *gin.Context) (string, string, bool) {
 	var userSession Session
 
 	sessionToken := getTokenFromCookie(c)
@@ -61,5 +61,5 @@ func GetCurrentUser(c *gin.Context) (string, bool) {
 		}
 	}
 
-	return userSession.User, ok
+	return userSession.User, userSession.Target, ok
 }

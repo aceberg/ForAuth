@@ -14,6 +14,7 @@ import (
 
 func loginHandler(c *gin.Context) {
 	var authOk bool
+	var username, targetName string
 
 	proxyAddr := c.MustGet("proxyAddr").(string)
 	targetStruct, ok := targetMap[proxyAddr]
@@ -21,29 +22,42 @@ func loginHandler(c *gin.Context) {
 	if !ok {
 		targetStruct.Target = appConfig.Target
 		targetStruct.Name = "Default"
+		username = authConf.User
 
 		authOk = auth.Auth(c, &authConf)
 	} else {
-		username, sesOk := auth.GetCurrentUser(c)
-		targetUser, ok := targetStruct.Users[username]
+		username, targetName, ok = auth.GetCurrentUser(c)
+		targetUser, exists := targetStruct.Users[username]
 
-		if sesOk && ((ok && targetUser.Auth) || username == authConf.User) {
+		if ok && ((exists && targetUser.Auth) || username == authConf.User) && (targetName == targetStruct.Name) {
 			authOk = true
 		}
 	}
 
 	if authOk {
-		reverseProxy(c, targetStruct.Target)
+		reverseProxy(c, targetStruct.Target, username)
 	} else {
 		loginScreen(c, targetStruct)
 	}
 }
 
-func reverseProxy(c *gin.Context, target string) {
+func reverseProxy(c *gin.Context, target string, username string) {
+
+	// log.Println("USER", username)
 
 	director := func(req *http.Request) {
 		req.URL.Scheme = "http"
 		req.URL.Host = target
+
+		req.Header.Del("X-Forwarded-User")
+		req.Header.Del("Remote-User")
+		req.Header.Del("X-Auth-User")
+		req.Header.Del("X-WEBAUTH-USER")
+
+		req.Header.Set("X-Forwarded-User", username)
+		req.Header.Set("Remote-User", username)
+		req.Header.Set("X-Auth-User", username)
+		req.Header.Set("X-WEBAUTH-USER", username)
 	}
 
 	proxy := &httputil.ReverseProxy{Director: director}

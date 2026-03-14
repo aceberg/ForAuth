@@ -81,22 +81,46 @@ th.desc::after { content: " ▼"; opacity:1; }
 
 <script>
 const table=document.getElementById("sessionsTable");
+const STORAGE_KEY="sessionsTableSort";
+
+function applySort(col,asc){
+  const tbody=table.tBodies[0];
+  const rows=[...tbody.rows];
+
+  table.querySelectorAll("th").forEach(h=>h.classList.remove("asc","desc"));
+  const th=table.querySelectorAll("th")[col];
+  th.classList.add(asc?"asc":"desc");
+
+  rows.sort((a,b)=>{
+    let A=a.cells[col].dataset.sort||a.cells[col].innerText;
+    let B=b.cells[col].dataset.sort||b.cells[col].innerText;
+    return asc?A.localeCompare(B,undefined,{numeric:true}):B.localeCompare(A,undefined,{numeric:true});
+  });
+
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
 [...table.querySelectorAll("th")].forEach((th,i)=>{
   if(i===7) return; // skip delete column
+
   th.onclick=()=>{
-    const tbody=table.tBodies[0];
-    const rows=[...tbody.rows];
     const asc=!th.classList.contains("asc");
-    table.querySelectorAll("th").forEach(h=>h.classList.remove("asc","desc"));
-    th.classList.add(asc?"asc":"desc");
-    rows.sort((a,b)=>{
-      let A=a.cells[i].dataset.sort||a.cells[i].innerText;
-      let B=b.cells[i].dataset.sort||b.cells[i].innerText;
-      return asc?A.localeCompare(B,undefined,{numeric:true}):B.localeCompare(A,undefined,{numeric:true});
-    });
-    rows.forEach(r=>tbody.appendChild(r));
+
+    applySort(i,asc);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      col:i,
+      asc:asc
+    }));
   };
 });
+
+// restore previous sort
+const saved=localStorage.getItem(STORAGE_KEY);
+if(saved){
+  const s=JSON.parse(saved);
+  applySort(s.col,s.asc);
+} else applySort(6,false);
 </script>
 
 {{ template "footer.html" }}

@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2026-03-
+### Added
+- Sort options for Sessions table
+- Show `Last Seen` for each session
+- Username in headers: X-Forwarded-User, Remote-User, X-Auth-User, X-WEBAUTH-USER
+
 ## [0.2.1] - 2026-03-04
 ### Added
 - Multiuser for targets
