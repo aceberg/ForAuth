@@ -29,7 +29,7 @@ builds:
 
 nfpms:
   - maintainer: aceberg <aceberg_a@proton.me>
-    description: Simple auth app (session-cookie) with multiple targets support
+    description: Auth app with notifications, multiple users and targets
     homepage: https://github.com/aceberg/ForAuth
     license: MIT
     section: utils

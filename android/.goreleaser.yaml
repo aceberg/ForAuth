@@ -1,0 +1,24 @@
+project_name: ForAuth
+builds:
+  - main: ../cmd/ForAuth/
+    binary: forauth
+    id: default
+    env: [CGO_ENABLED=0]
+    goos:
+      - android
+    goarch:
+      - arm64
+    
+
+nfpms:
+  - maintainer: aceberg <aceberg_a@proton.me>
+    description: Auth app with notifications, multiple users and targets
+    homepage: https://github.com/aceberg/ForAuth
+    license: MIT
+    section: utils
+    formats:
+    - termux.deb
+
+
+archives:
+  - wrap_in_directory: true
