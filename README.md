@@ -1,5 +1,4 @@
 [![Main-Docker](https://github.com/aceberg/ForAuth/actions/workflows/main-docker-all.yml/badge.svg)](https://github.com/aceberg/ForAuth/actions/workflows/main-docker-all.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/aceberg/forauth)](https://goreportcard.com/report/github.com/aceberg/forauth)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/aceberg/forauth)
 
 <h1><a href="https://github.com/aceberg/forauth">
