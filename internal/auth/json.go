@@ -2,8 +2,8 @@ package auth
 
 import (
 	"encoding/json"
+	"maps"
 	"os"
-	"time"
 
 	"github.com/aceberg/ForAuth/internal/check"
 )
@@ -23,26 +23,25 @@ func RestoreSessions() {
 
 // SaveSessions - save sessions to file
 func SaveSessions() {
+	saveMu.Lock()
+	defer saveMu.Unlock()
+
 	mu.RLock()
-	jsonData, err := json.MarshalIndent(allSessions, "", "  ")
+	data := maps.Clone(allSessions)
 	mu.RUnlock()
-	check.IfError(err)
 
-	err = os.WriteFile(SessionsFilePath, jsonData, 0644)
-	check.IfError(err)
-}
+	tmp := SessionsFilePath + ".tmp"
 
-// SessionWriter - save sessions every N seconds
-func SessionWriter() {
-	for {
-		time.Sleep(5 * time.Second)
-
-		if sessionDirty {
-
-			SaveSessions()
-			sessionDirty = false
-
-			// log.Println("Writing to sessions.json")
-		}
+	file, err := os.Create(tmp)
+	if check.IfError(err) {
+		return
 	}
+
+	err = json.NewEncoder(file).Encode(data)
+	check.IfError(err)
+	err = file.Close()
+	check.IfError(err)
+
+	err = os.Rename(tmp, SessionsFilePath)
+	check.IfError(err)
 }

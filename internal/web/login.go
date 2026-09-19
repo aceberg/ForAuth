@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 
@@ -41,26 +42,22 @@ func loginHandler(c *gin.Context) {
 	}
 }
 
-func reverseProxy(c *gin.Context, target string, username string) {
+func reverseProxy(c *gin.Context, target, username string) {
+	targetURL, _ := url.Parse("http://" + target)
 
-	// log.Println("USER", username)
+	proxy := &httputil.ReverseProxy{
+		Rewrite: func(r *httputil.ProxyRequest) {
+			r.SetURL(targetURL)
 
-	director := func(req *http.Request) {
-		req.URL.Scheme = "http"
-		req.URL.Host = target
+			r.Out.Header.Set("X-Forwarded-User", username)
+			r.Out.Header.Set("Remote-User", username)
+			r.Out.Header.Set("X-Auth-User", username)
+			r.Out.Header.Set("X-WEBAUTH-USER", username)
 
-		req.Header.Del("X-Forwarded-User")
-		req.Header.Del("Remote-User")
-		req.Header.Del("X-Auth-User")
-		req.Header.Del("X-WEBAUTH-USER")
-
-		req.Header.Set("X-Forwarded-User", username)
-		req.Header.Set("Remote-User", username)
-		req.Header.Set("X-Auth-User", username)
-		req.Header.Set("X-WEBAUTH-USER", username)
+			r.Out.Header.Set("X-Forwarded-Host", r.In.Host)
+		},
 	}
 
-	proxy := &httputil.ReverseProxy{Director: director}
 	proxy.ServeHTTP(c.Writer, c.Request)
 }
 

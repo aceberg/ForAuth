@@ -24,7 +24,6 @@ func Gui(dirPath, nodePath string) {
 	auth.SessionsFilePath = dirPath + "/sessions.json"
 	check.Path(auth.SessionsFilePath)
 	auth.RestoreSessions()
-	go auth.SessionWriter()
 
 	appConfig, authConf = conf.Get(confPath)
 	appConfig.DirPath = dirPath

@@ -30,7 +30,7 @@ func StartSession(c *gin.Context, currentAuth Conf, clientIP, target string) {
 	mu.Lock()
 	allSessions[sessionToken] = ses
 	mu.Unlock()
-	sessionDirty = true
+	SaveSessions()
 
 	setTokenCookie(c, sessionToken)
 }
@@ -43,7 +43,7 @@ func LogOut(c *gin.Context) {
 	mu.Lock()
 	delete(allSessions, sessionToken)
 	mu.Unlock()
-	sessionDirty = true
+	SaveSessions()
 
 	setTokenCookie(c, "")
 }
@@ -54,7 +54,7 @@ func LogOutByToken(token string) {
 	mu.Lock()
 	delete(allSessions, token)
 	mu.Unlock()
-	sessionDirty = true
+	SaveSessions()
 }
 
 // GetAllSessions - get current sessions

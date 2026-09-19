@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Show `Last Seen` for each session
 - Username in headers: `X-Forwarded-User`, `Remote-User`, `X-Auth-User`, `X-WEBAUTH-USER`
 - Binary for Android and Termux
+- SaveSession directly, removed goroutine
 
 ## [0.2.1] - 2026-03-04
 ### Added

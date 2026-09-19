@@ -40,7 +40,7 @@ func GetCurrentUser(c *gin.Context) (string, string, bool) {
 		delete(allSessions, sessionToken)
 		mu.Unlock()
 
-		sessionDirty = true
+		SaveSessions()
 
 		ok = false
 	}
@@ -57,7 +57,7 @@ func GetCurrentUser(c *gin.Context) (string, string, bool) {
 			allSessions[sessionToken] = userSession
 			mu.Unlock()
 
-			sessionDirty = true
+			SaveSessions()
 		}
 	}
 

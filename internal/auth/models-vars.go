@@ -27,6 +27,7 @@ type Session struct {
 }
 
 var mu sync.RWMutex
+var saveMu sync.Mutex
 
 var allSessions = make(map[string]Session)
 
@@ -34,5 +35,3 @@ var cookieName = "forauth_session_token"
 
 // SessionsFilePath - path to sessions.json file
 var SessionsFilePath string
-
-var sessionDirty bool
